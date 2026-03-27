@@ -1,0 +1,217 @@
+<% content_for :title, "Subh Vivaah — Find your life partner with confidence" %>
+
+<div class="home-page">
+  <%= render "shared/site_header" %>
+
+  <main>
+    <section class="hero">
+      <div class="container hero__grid">
+        <div class="hero__content">
+          <h1 class="hero__title">Find your life partner with confidence</h1>
+          <p class="hero__lead">Discover meaningful connections with verified profiles, respectful matching, and privacy built in from day one. Your journey deserves clarity and care.</p>
+          <div class="hero__ctas">
+            <%= link_to "Sign Up Free", new_user_registration_path, class: "btn btn--primary" %>
+            <%= link_to "Start a Search", "#quick-search", class: "btn btn--primary" %>
+          </div>
+
+          <div id="quick-search" class="quick-search card">
+            <h2 class="quick-search__title">Quick Search</h2>
+            <%= form_with url: root_path, method: :get, local: true, class: "quick-search__form" do %>
+              <div class="quick-search__row">
+                <input type="text" name="age_range" placeholder="Age (e.g. 25–32)" class="input" aria-label="Age range">
+                <input type="text" name="community" placeholder="Religion / Community" class="input" aria-label="Religion or community">
+                <input type="text" name="location" placeholder="Location (City, State)" class="input" aria-label="Location">
+                <select name="gender" class="input input--select" aria-label="Gender">
+                  <option value="">Gender</option>
+                  <option value="woman">Woman</option>
+                  <option value="man">Man</option>
+                  <option value="other">Other</option>
+                </select>
+                <select name="intention" class="input input--select" aria-label="Intention">
+                  <option value="">Intention</option>
+                  <option value="marriage">Marriage</option>
+                  <option value="serious">Serious relationship</option>
+                </select>
+              </div>
+              <div class="quick-search__actions">
+                <%= submit_tag "Search Profiles", class: "btn btn--primary" %>
+              </div>
+            <% end %>
+            <p class="quick-search__hint">Refine by age, community, location or intention.</p>
+          </div>
+
+          <ul class="trust-row">
+            <li class="trust-row__item">
+              <span class="trust-row__icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+              Verified Profiles
+            </li>
+            <li class="trust-row__item">
+              <span class="trust-row__icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+              Success Stories
+            </li>
+            <li class="trust-row__item">
+              <span class="trust-row__icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+              Privacy First
+            </li>
+          </ul>
+        </div>
+
+        <div class="hero__visual">
+          <div class="hero__image-wrap">
+            <%= image_tag "/images/hero-landing.png", alt: "Diverse group celebrating together", class: "hero__image", loading: "eager" %>
+            <div class="hero__badge card">
+              <span class="hero__badge-dot"></span>
+              <div>
+                <strong>Verified Badge</strong>
+                <p class="hero__badge-text">Photo &amp; ID checked profiles</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--categories" aria-labelledby="popular-categories-heading">
+      <div class="container">
+        <h2 id="popular-categories-heading" class="section__title">Popular categories</h2>
+        <div class="category-pills">
+          <% ["Engineers", "Doctors", "Software & IT", "MBA & Finance", "Divorced & Remarried", "Widowed"].each do |label| %>
+            <%= link_to label, "#", class: "category-pill" %>
+          <% end %>
+        </div>
+      </div>
+    </section>
+
+    <section id="featured-profiles" class="section">
+      <div class="container">
+        <div class="section__head">
+          <h2 class="section__title">Featured &amp; Verified Profiles</h2>
+          <p class="section__subtitle">Showing curated profiles trusted by our community</p>
+        </div>
+        <div class="profile-grid">
+          <% featured = [
+            { name: "Aarav Malhotra", age: 29, loc: "Bengaluru", role: "Software Engineer", bio: "Values family, travel, and honest conversation. Looking for a grounded partner to build a life together.", img: "12" },
+            { name: "Priya Sharma", age: 27, loc: "Mumbai", role: "Doctor", bio: "Warm, ambitious, and rooted in tradition with a modern outlook. Enjoys music and weekend hikes.", img: "45" },
+            { name: "Vikram Desai", age: 31, loc: "Hyderabad", role: "Product Manager", bio: "Calm, dependable, and intentional about relationships. Believes in equal partnership and respect.", img: "33" },
+            { name: "Ananya Iyer", age: 28, loc: "Chennai", role: "Architect", bio: "Creative soul who loves design and home-cooked meals. Seeking kindness and shared values.", img: "47" }
+          ] %>
+          <% featured.each do |p| %>
+            <article class="profile-card card">
+              <div class="profile-card__photo">
+                <%= image_tag "https://i.pravatar.cc/400?img=#{p[:img]}", alt: "", class: "profile-card__img", loading: "lazy", width: 400, height: 280 %>
+              </div>
+              <div class="profile-card__body">
+                <h3 class="profile-card__name"><%= p[:name] %>, <%= p[:age] %></h3>
+                <p class="profile-card__meta"><%= p[:loc] %> · <%= p[:role] %></p>
+                <p class="profile-card__bio"><%= p[:bio] %></p>
+                <div class="profile-card__actions">
+                  <%= link_to "View Profile", "#", class: "btn btn--outline btn--sm" %>
+                  <%= link_to "Connect", "#", class: "btn btn--primary btn--sm" %>
+                </div>
+              </div>
+            </article>
+          <% end %>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--split">
+      <div class="container split">
+        <div class="split__col">
+          <h2 class="section__title">Success Stories</h2>
+          <ul class="story-list">
+            <li class="story-list__item">
+              <%= image_tag "https://i.pravatar.cc/80?img=32", alt: "", class: "story-list__avatar", loading: "lazy", width: 48, height: 48 %>
+              <div>
+                <p class="story-list__names">Meera Kapoor &amp; Rohit Singh — Matched 2021</p>
+                <p class="story-list__quote">“We never thought an app could feel this human. The team’s care made all the difference.”</p>
+              </div>
+            </li>
+            <li class="story-list__item">
+              <%= image_tag "https://i.pravatar.cc/80?img=27", alt: "", class: "story-list__avatar", loading: "lazy", width: 48, height: 48 %>
+              <div>
+                <p class="story-list__names">Aditi Rao &amp; Karan Mehta — Matched 2022</p>
+                <p class="story-list__quote">“Verification gave our families confidence from the first conversation.”</p>
+              </div>
+            </li>
+            <li class="story-list__item">
+              <%= image_tag "https://i.pravatar.cc/80?img=15", alt: "", class: "story-list__avatar", loading: "lazy", width: 48, height: 48 %>
+              <div>
+                <p class="story-list__names">Neha Verma &amp; Arjun Pillai — Matched 2023</p>
+                <p class="story-list__quote">“Respectful matching and clear intentions—exactly what we were looking for.”</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div id="how-verified" class="split__col">
+          <h2 class="section__title">Why Verified Matters</h2>
+          <p class="split__lead">Every profile goes through a structured review so you spend time on real people with serious intent—not bots or misrepresented photos.</p>
+          <ul class="verify-list">
+            <li class="verify-list__item">
+              <span class="verify-list__icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span>
+              <div>
+                <strong>Photo Verification</strong>
+                <p>Selfie checks help confirm the person behind the profile.</p>
+              </div>
+            </li>
+            <li class="verify-list__item">
+              <span class="verify-list__icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg></span>
+              <div>
+                <strong>ID Checks</strong>
+                <p>Government ID validation reduces fraud and impersonation.</p>
+              </div>
+            </li>
+            <li class="verify-list__item">
+              <span class="verify-list__icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></span>
+              <div>
+                <strong>Manual Review</strong>
+                <p>Our team reviews edge cases and keeps community standards high.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing" class="section section--premium">
+      <div class="container premium">
+        <div class="premium__intro">
+          <h2 class="section__title">Become a premium member</h2>
+          <p class="premium__text">Unlock priority placement, richer insights, and dedicated support when you are ready to move faster with confidence.</p>
+          <div class="premium__ctas">
+            <%= link_to "Explore Plans", "#pricing-cards", class: "btn btn--primary" %>
+            <%= link_to "Compare Benefits", "#pricing-cards", class: "btn btn--outline" %>
+          </div>
+        </div>
+        <div id="pricing-cards" class="premium__cards">
+          <article class="pricing-card card">
+            <h3 class="pricing-card__tier">Essentials</h3>
+            <p class="pricing-card__price">Free</p>
+            <ul class="pricing-card__features">
+              <li>Basic search</li>
+              <li>Limited messages</li>
+            </ul>
+          </article>
+          <article class="pricing-card card pricing-card--highlight">
+            <h3 class="pricing-card__tier">Premium</h3>
+            <p class="pricing-card__price">₹999<span class="pricing-card__period">/mo</span></p>
+            <ul class="pricing-card__features">
+              <li>Priority access</li>
+              <li>Verified highlight</li>
+            </ul>
+          </article>
+          <article class="pricing-card card">
+            <h3 class="pricing-card__tier">Platinum</h3>
+            <p class="pricing-card__price">₹1,999<span class="pricing-card__period">/mo</span></p>
+            <ul class="pricing-card__features">
+              <li>Dedicated support</li>
+              <li>Concierge assistance</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <%= render "shared/site_footer" %>
+</div>
