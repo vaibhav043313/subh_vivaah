@@ -10,9 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_26_135755) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_28_120002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.string "content_type"
+    t.datetime "created_at", null: false
+    t.string "filename", null: false
+    t.string "key", null: false
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
 
   create_table "matches", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -48,10 +76,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_26_135755) do
     t.string "country"
     t.datetime "created_at", null: false
     t.date "date_of_birth", null: false
+    t.string "education"
     t.string "first_name", null: false
     t.integer "gender"
+    t.boolean "has_photo", default: true, null: false
+    t.integer "height_cm"
     t.integer "income"
     t.string "last_name"
+    t.string "marital_status"
+    t.string "mother_tongue"
     t.string "profession"
     t.string "religion"
     t.string "state"
@@ -74,9 +107,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_26_135755) do
     t.string "current_sign_in_ip"
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
+    t.datetime "last_seen_at"
     t.datetime "last_sign_in_at"
     t.string "last_sign_in_ip"
     t.string "phone_number"
+    t.boolean "premium", default: false, null: false
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
@@ -88,6 +123,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_26_135755) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "matches", "users"
   add_foreign_key "preferences", "users"
   add_foreign_key "profiles", "users"

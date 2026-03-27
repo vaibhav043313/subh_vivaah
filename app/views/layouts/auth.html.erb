@@ -1,11 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title><%= content_for(:title) || "Subh Vivaah" %></title>
+    <title><%= content_for(:title) || "Account — Subh Vivaah" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Subh Vivaah">
-    <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -13,19 +10,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "auth", "data-turbo-track": "reload" %>
     <%= yield :head %>
     <%= javascript_importmap_tags %>
   </head>
+  <body class="auth-body">
+    <%= render "users/shared/auth_header" %>
 
-  <body>
-    <%= yield %>
+    <% flash.each do |type, message| %>
+      <% next if message.blank? %>
+      <div class="auth-flash auth-flash--<%= type == "notice" ? "notice" : "alert" %>" role="alert">
+        <%= message %>
+      </div>
+    <% end %>
+
+    <main class="auth-main">
+      <%= yield %>
+    </main>
   </body>
 </html>

@@ -1,0 +1,10 @@
+<%= link_to profile_path(profile), class: "similar-profile-card" do %>
+  <div class="similar-profile-card__media">
+    <%= image_tag profile_similar_thumb_url(profile), alt: "", class: "similar-profile-card__img", loading: "lazy" %>
+  </div>
+  <div class="similar-profile-card__body">
+    <% age = profile_age_years(profile) %>
+    <span class="similar-profile-card__name"><%= profile_display_name(profile) %><%= ", #{age}" if age %></span>
+    <span class="similar-profile-card__loc"><%= profile_location_line(profile).presence || "—" %></span>
+  </div>
+<% end %>

@@ -11,26 +11,27 @@
           <p class="hero__lead">Discover meaningful connections with verified profiles, respectful matching, and privacy built in from day one. Your journey deserves clarity and care.</p>
           <div class="hero__ctas">
             <%= link_to "Sign Up Free", new_user_registration_path, class: "btn btn--primary" %>
-            <%= link_to "Start a Search", "#quick-search", class: "btn btn--primary" %>
+            <%= link_to "Start a Search", user_signed_in? ? profiles_path : "#quick-search", class: "btn btn--primary" %>
           </div>
 
           <div id="quick-search" class="quick-search card">
             <h2 class="quick-search__title">Quick Search</h2>
-            <%= form_with url: root_path, method: :get, local: true, class: "quick-search__form" do %>
+            <%= form_with url: profiles_path, method: :get, local: true, class: "quick-search__form" do %>
               <div class="quick-search__row">
-                <input type="text" name="age_range" placeholder="Age (e.g. 25–32)" class="input" aria-label="Age range">
-                <input type="text" name="community" placeholder="Religion / Community" class="input" aria-label="Religion or community">
-                <input type="text" name="location" placeholder="Location (City, State)" class="input" aria-label="Location">
+                <input type="number" name="age_min" placeholder="Min age" class="input" min="18" max="80" aria-label="Minimum age">
+                <input type="number" name="age_max" placeholder="Max age" class="input" min="18" max="80" aria-label="Maximum age">
+                <input type="text" name="city" placeholder="Location (City)" class="input" aria-label="City">
                 <select name="gender" class="input input--select" aria-label="Gender">
                   <option value="">Gender</option>
-                  <option value="woman">Woman</option>
-                  <option value="man">Man</option>
-                  <option value="other">Other</option>
+                  <option value="female">Woman</option>
+                  <option value="male">Man</option>
                 </select>
-                <select name="intention" class="input input--select" aria-label="Intention">
-                  <option value="">Intention</option>
-                  <option value="marriage">Marriage</option>
-                  <option value="serious">Serious relationship</option>
+                <select name="religion" class="input input--select" aria-label="Religion">
+                  <option value="">Religion</option>
+                  <option value="Hindu">Hindu</option>
+                  <option value="Muslim">Muslim</option>
+                  <option value="Christian">Christian</option>
+                  <option value="Sikh">Sikh</option>
                 </select>
               </div>
               <div class="quick-search__actions">

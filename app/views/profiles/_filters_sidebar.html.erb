@@ -1,0 +1,140 @@
+<% fp = @filter_params %>
+<%= form_with url: profiles_path, method: :get, local: true, class: "browse-filters", id: "profiles-filters-form" do %>
+  <div class="browse-filters__head">
+    <h2 class="browse-filters__title">Filters</h2>
+    <p class="browse-filters__count"><%= number_with_delimiter(@total_count) %> results</p>
+  </div>
+
+  <div class="browse-filters__section">
+    <h3 class="browse-filters__label">Gender</h3>
+    <%= select_tag :gender,
+        options_for_select([["Any", ""], ["Female", "female"], ["Male", "male"]], fp[:gender]),
+        class: "input input--select" %>
+  </div>
+
+  <div class="browse-filters__section">
+    <h3 class="browse-filters__label">Age</h3>
+    <div class="browse-filters__range">
+      <input type="number" name="age_min" class="input input--compact" placeholder="Min" min="18" max="80" value="<%= fp[:age_min] %>" aria-label="Minimum age">
+      <span class="browse-filters__range-sep">—</span>
+      <input type="number" name="age_max" class="input input--compact" placeholder="Max" min="18" max="80" value="<%= fp[:age_max] %>" aria-label="Maximum age">
+    </div>
+    <p class="browse-filters__hint">e.g. 18–35</p>
+  </div>
+
+  <div class="browse-filters__section">
+    <h3 class="browse-filters__label">Community</h3>
+    <% communities = [
+      ["Brahmin", "Brahmin"],
+      ["Kshatriya", "Kshatriya"],
+      ["Vaishya", "Vaishya"]
+    ] %>
+    <% communities.each do |label, value| %>
+      <% checked = Array(fp[:community]).include?(value) %>
+      <label class="browse-filters__check">
+        <%= check_box_tag "community[]", value, checked, id: "community_#{value.parameterize}" %>
+        <span><%= label %> <span class="browse-filters__meta">(<%= format_filter_count(@community_counts[value] || 0) %>)</span></span>
+      </label>
+    <% end %>
+  </div>
+
+  <div class="browse-filters__section">
+    <h3 class="browse-filters__label">Location</h3>
+    <input type="text" name="city" class="input" placeholder="City or ZIP" value="<%= fp[:city] %>" aria-label="City">
+    <input type="text" name="state" class="input browse-filters__field-gap" placeholder="State / Region" value="<%= fp[:state] %>" aria-label="State">
+  </div>
+
+  <div class="browse-filters__section">
+    <h3 class="browse-filters__label">Education</h3>
+    <% [["B.Tech / BE", "B.Tech / BE"], ["MBA / PGDM", "MBA / PGDM"], ["PhD / MPhil", "PhD / MPhil"]].each do |label, value| %>
+      <label class="browse-filters__check">
+        <%= check_box_tag "education[]", value, Array(fp[:education]).include?(value), id: "edu_#{value.parameterize}" %>
+        <span><%= label %></span>
+      </label>
+    <% end %>
+  </div>
+
+  <div class="browse-filters__section">
+    <h3 class="browse-filters__label">Occupation</h3>
+    <% [["Software Engineer", "Software Engineer"], ["Doctor", "Doctor"], ["Business Owner", "Business Owner"]].each do |label, value| %>
+      <label class="browse-filters__check">
+        <%= check_box_tag "occupation[]", value, Array(fp[:occupation]).include?(value), id: "occ_#{value.parameterize}" %>
+        <span><%= label %></span>
+      </label>
+    <% end %>
+  </div>
+
+  <div class="browse-filters__section">
+    <h3 class="browse-filters__label">Religion</h3>
+    <%= select_tag :religion,
+        options_for_select(
+          [
+            ["Hindu", "Hindu"],
+            ["Muslim", "Muslim"],
+            ["Christian", "Christian"],
+            ["Sikh", "Sikh"],
+            ["Jain", "Jain"],
+            ["Buddhist", "Buddhist"],
+            ["Other", "Other"]
+          ],
+          fp[:religion]
+        ),
+        include_blank: "Any",
+        class: "input input--select" %>
+  </div>
+
+  <div class="browse-filters__section">
+    <h3 class="browse-filters__label">Caste / Subcaste</h3>
+    <input type="text" name="caste_subcaste" class="input" placeholder="Search caste" value="<%= fp[:caste_subcaste] %>" autocomplete="off">
+  </div>
+
+  <div class="browse-filters__section">
+    <h3 class="browse-filters__label">Mother Tongue</h3>
+    <% [["Hindi", "Hindi"], ["Tamil", "Tamil"], ["Telugu", "Telugu"]].each do |label, value| %>
+      <label class="browse-filters__check">
+        <%= check_box_tag "mother_tongue[]", value, Array(fp[:mother_tongue]).include?(value), id: "mt_#{value.parameterize}" %>
+        <span><%= label %></span>
+      </label>
+    <% end %>
+  </div>
+
+  <div class="browse-filters__section">
+    <h3 class="browse-filters__label">Height (cm)</h3>
+    <div class="browse-filters__range">
+      <input type="number" name="height_min_cm" class="input input--compact" placeholder="Min" min="120" max="220" value="<%= fp[:height_min_cm] %>" aria-label="Minimum height cm">
+      <span class="browse-filters__range-sep">—</span>
+      <input type="number" name="height_max_cm" class="input input--compact" placeholder="Max" min="120" max="220" value="<%= fp[:height_max_cm] %>" aria-label="Maximum height cm">
+    </div>
+    <p class="browse-filters__hint">Approx. 4′6″ – 6′2″</p>
+  </div>
+
+  <div class="browse-filters__section">
+    <h3 class="browse-filters__label">Quick filters</h3>
+    <label class="browse-filters__toggle">
+      <%= check_box_tag :photo_only, "1", ActiveModel::Type::Boolean.new.cast(fp[:photo_only]), class: "browse-filters__toggle-input" %>
+      <span class="browse-filters__toggle-ui" aria-hidden="true"></span>
+      <span>Photo only</span>
+    </label>
+    <label class="browse-filters__toggle">
+      <%= check_box_tag :online_now, "1", ActiveModel::Type::Boolean.new.cast(fp[:online_now]), class: "browse-filters__toggle-input" %>
+      <span class="browse-filters__toggle-ui" aria-hidden="true"></span>
+      <span>Online now</span>
+    </label>
+    <label class="browse-filters__toggle">
+      <%= check_box_tag :verified_only, "1", ActiveModel::Type::Boolean.new.cast(fp[:verified_only]), class: "browse-filters__toggle-input" %>
+      <span class="browse-filters__toggle-ui" aria-hidden="true"></span>
+      <span>Verified</span>
+    </label>
+  </div>
+
+  <div class="browse-filters__actions">
+    <%= submit_tag "Apply", class: "btn btn--primary browse-filters__apply" %>
+    <%= link_to "Clear", profiles_path, class: "btn btn--outline browse-filters__clear" %>
+  </div>
+
+  <%# preserve sort & view when applying filters from sidebar %>
+  <%= hidden_field_tag :sort, fp[:sort] if fp[:sort].present? %>
+  <%= hidden_field_tag :view, @view_mode %>
+  <%= hidden_field_tag :gender, fp[:gender] if fp[:gender].present? %>
+  <%= hidden_field_tag :q, fp[:q] if fp[:q].present? %>
+<% end %>

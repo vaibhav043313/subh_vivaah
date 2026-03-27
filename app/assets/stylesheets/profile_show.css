@@ -1,0 +1,316 @@
+/* Profile detail — aligned with Subh Vivaah (Inter, neutral surfaces, coral CTA like listing) */
+
+.profile-show-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+}
+
+.profile-show {
+  flex: 1;
+  padding: 1rem 0 3rem;
+}
+
+.profile-show__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-muted);
+  margin-bottom: 1.25rem;
+}
+
+.profile-show__back:hover {
+  color: var(--color-text);
+}
+
+.profile-show__hero {
+  display: grid;
+  grid-template-columns: minmax(280px, 420px) 1fr;
+  gap: 2rem;
+  padding: 1.75rem;
+  margin-bottom: 1.5rem;
+  align-items: start;
+}
+
+.profile-show__gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.profile-show__gallery-main {
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--color-surface-dark);
+  border: 1px solid var(--color-border);
+}
+
+.profile-show__gallery-main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-show__thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.profile-show__thumb {
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  cursor: pointer;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  background: var(--color-surface-dark);
+  line-height: 0;
+}
+
+.profile-show__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-show__thumb.is-active,
+.profile-show__thumb:focus-visible {
+  border-color: #0a0a0a;
+  outline: none;
+}
+
+.profile-show__summary {
+  min-width: 0;
+}
+
+.profile-show__name {
+  margin: 0 0 1rem;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--color-text);
+}
+
+.profile-show__pills {
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.profile-show__pill {
+  display: inline-block;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--color-border);
+}
+
+.profile-show__pill--age {
+  color: #b91c1c;
+  border-color: #fecaca;
+  background: #fef2f2;
+}
+
+.profile-show__pill--height {
+  color: #be185d;
+  border-color: #fbcfe8;
+  background: #fdf2f8;
+}
+
+.profile-show__pill--marital {
+  color: #c2410c;
+  border-color: #fed7aa;
+  background: #fff7ed;
+}
+
+.profile-show__pill--religion {
+  color: #475569;
+  border-color: #e2e8f0;
+  background: #f8fafc;
+}
+
+.profile-show__quick {
+  margin: 0 0 1.5rem;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.profile-show__quick-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.9375rem;
+  color: #404040;
+}
+
+.profile-show__quick-icon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  margin-top: 0.1rem;
+  color: var(--color-muted);
+}
+
+.profile-show__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.profile-show__btn-interest {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.profile-show__btn-browse svg {
+  transform: rotate(180deg);
+}
+
+.profile-show__section {
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.profile-show__section-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.profile-show__section-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.profile-show__about {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: #404040;
+}
+
+.profile-show__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem 2rem;
+}
+
+@media (max-width: 640px) {
+  .profile-show__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profile-show__field-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  margin-bottom: 0.2rem;
+}
+
+.profile-show__field-value {
+  font-size: 0.9375rem;
+  color: var(--color-text);
+}
+
+.profile-show__similar {
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.profile-show__similar-title {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.profile-show__similar-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+@media (min-width: 900px) {
+  .profile-show__similar-row {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.similar-profile-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.similar-profile-card:hover {
+  border-color: var(--color-border-strong);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.similar-profile-card__media {
+  aspect-ratio: 4 / 5;
+  background: var(--color-surface-dark);
+}
+
+.similar-profile-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.similar-profile-card__body {
+  padding: 0.65rem 0.75rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.similar-profile-card__name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.similar-profile-card__loc {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  line-height: 1.35;
+}
+
+@media (max-width: 900px) {
+  .profile-show__hero {
+    grid-template-columns: 1fr;
+  }
+}

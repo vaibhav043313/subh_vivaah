@@ -1,0 +1,198 @@
+<% content_for :title, "#{profile_display_name(@profile)} — Subh Vivaah" %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "browse", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "profile_show", "data-turbo-track": "reload" %>
+<% end %>
+
+<% age = profile_age_years(@profile) %>
+<% gallery = profile_gallery_sources(@profile) %>
+
+<div class="profile-show-page">
+  <%= render "shared/app_header" %>
+
+  <main class="profile-show container container--wide">
+    <%= link_to profiles_path, class: "profile-show__back" do %>
+      <span aria-hidden="true">←</span> Back
+    <% end %>
+
+    <section class="profile-show__hero card">
+      <div class="profile-show__gallery" data-controller="photo-gallery">
+        <div class="profile-show__gallery-main">
+          <img
+            data-photo-gallery-target="main"
+            src="<%= gallery.first[:full] %>"
+            alt="Photo of <%= profile_display_name(@profile) %>">
+        </div>
+        <% if gallery.size > 1 %>
+          <div class="profile-show__thumbs" role="tablist" aria-label="Profile photos">
+            <% gallery.each_with_index do |src, i| %>
+              <button
+                type="button"
+                class="profile-show__thumb<%= ' is-active' if i.zero? %>"
+                data-photo-gallery-target="thumb"
+                data-action="click->photo-gallery#select"
+                data-full-url="<%= src[:full] %>"
+                aria-label="Photo <%= i + 1 %>"
+                aria-selected="<%= i.zero? %>">
+                <%= image_tag src[:thumb], alt: "" %>
+              </button>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="profile-show__summary">
+        <h1 class="profile-show__name"><%= profile_display_name(@profile) %></h1>
+
+        <ul class="profile-show__pills">
+          <% if age %>
+            <li class="profile-show__pill profile-show__pill--age"><%= age %> years</li>
+          <% end %>
+          <li class="profile-show__pill profile-show__pill--height"><%= profile_height_imperial(@profile) %></li>
+          <% if @profile.marital_status.present? %>
+            <li class="profile-show__pill profile-show__pill--marital"><%= @profile.marital_status %></li>
+          <% end %>
+          <% if @profile.religion.present? %>
+            <li class="profile-show__pill profile-show__pill--religion"><%= @profile.religion %></li>
+          <% end %>
+        </ul>
+
+        <ul class="profile-show__quick">
+          <li class="profile-show__quick-item">
+            <span class="profile-show__quick-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </span>
+            <span><%= [ @profile.city, @profile.state, @profile.country ].compact_blank.join(", ").presence || "—" %></span>
+          </li>
+          <li class="profile-show__quick-item">
+            <span class="profile-show__quick-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+            </span>
+            <span><%= profile_detail_value(@profile.profession) %></span>
+          </li>
+          <li class="profile-show__quick-item">
+            <span class="profile-show__quick-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            </span>
+            <span><%= profile_detail_value(@profile.education) %></span>
+          </li>
+        </ul>
+
+        <div class="profile-show__actions">
+          <%= link_to "#", class: "btn btn--coral profile-show__btn-interest" do %>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            Send Interest
+          <% end %>
+          <%= link_to profiles_path, class: "btn btn--outline profile-show__btn-browse" do %>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            Browse more
+          <% end %>
+        </div>
+      </div>
+    </section>
+
+    <section class="profile-show__section card" aria-labelledby="about-heading">
+      <h2 id="about-heading" class="profile-show__section-head">
+        <span class="profile-show__section-icon" aria-hidden="true">👤</span>
+        About me
+      </h2>
+      <p class="profile-show__about"><%= @profile.bio.presence || "This member has not added an about section yet." %></p>
+    </section>
+
+    <section class="profile-show__section card" aria-labelledby="personal-heading">
+      <h2 id="personal-heading" class="profile-show__section-head">
+        <span class="profile-show__section-icon" aria-hidden="true">📋</span>
+        Personal details
+      </h2>
+      <div class="profile-show__grid">
+        <div>
+          <span class="profile-show__field-label">Date of birth</span>
+          <span class="profile-show__field-value"><%= @profile.date_of_birth&.strftime("%d %b %Y") || "—" %></span>
+        </div>
+        <div>
+          <span class="profile-show__field-label">Age</span>
+          <span class="profile-show__field-value"><%= age ? "#{age} years" : "—" %></span>
+        </div>
+        <div>
+          <span class="profile-show__field-label">Height</span>
+          <span class="profile-show__field-value"><%= profile_height_imperial(@profile) %><%= " (#{@profile.height_cm} cm)" if @profile.height_cm.present? %></span>
+        </div>
+        <div>
+          <span class="profile-show__field-label">Marital status</span>
+          <span class="profile-show__field-value"><%= profile_detail_value(@profile.marital_status) %></span>
+        </div>
+        <div>
+          <span class="profile-show__field-label">Religion</span>
+          <span class="profile-show__field-value"><%= profile_detail_value(@profile.religion) %></span>
+        </div>
+        <div>
+          <span class="profile-show__field-label">Caste</span>
+          <span class="profile-show__field-value"><%= profile_detail_value(@profile.caste) %></span>
+        </div>
+        <div>
+          <span class="profile-show__field-label">Mother tongue</span>
+          <span class="profile-show__field-value"><%= profile_detail_value(@profile.mother_tongue) %></span>
+        </div>
+        <div>
+          <span class="profile-show__field-label">Gender</span>
+          <span class="profile-show__field-value"><%= @profile.gender.present? ? @profile.gender.humanize : "—" %></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="profile-show__section card" aria-labelledby="career-heading">
+      <h2 id="career-heading" class="profile-show__section-head">
+        <span class="profile-show__section-icon" aria-hidden="true">🎓</span>
+        Education &amp; career
+      </h2>
+      <div class="profile-show__grid">
+        <div>
+          <span class="profile-show__field-label">Education</span>
+          <span class="profile-show__field-value"><%= profile_detail_value(@profile.education) %></span>
+        </div>
+        <div>
+          <span class="profile-show__field-label">Occupation</span>
+          <span class="profile-show__field-value"><%= profile_detail_value(@profile.profession) %></span>
+        </div>
+        <div>
+          <span class="profile-show__field-label">Annual income</span>
+          <span class="profile-show__field-value"><%= profile_income_label(@profile) %></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="profile-show__section card" aria-labelledby="location-heading">
+      <h2 id="location-heading" class="profile-show__section-head">
+        <span class="profile-show__section-icon" aria-hidden="true">📍</span>
+        Location
+      </h2>
+      <div class="profile-show__grid">
+        <div>
+          <span class="profile-show__field-label">City</span>
+          <span class="profile-show__field-value"><%= profile_detail_value(@profile.city) %></span>
+        </div>
+        <div>
+          <span class="profile-show__field-label">State</span>
+          <span class="profile-show__field-value"><%= profile_detail_value(@profile.state) %></span>
+        </div>
+        <div>
+          <span class="profile-show__field-label">Country</span>
+          <span class="profile-show__field-value"><%= profile_detail_value(@profile.country) %></span>
+        </div>
+      </div>
+    </section>
+
+    <% if @similar_profiles.any? %>
+      <section class="profile-show__similar" aria-labelledby="similar-heading">
+        <h2 id="similar-heading" class="profile-show__similar-title">Similar profiles</h2>
+        <div class="profile-show__similar-row">
+          <% @similar_profiles.each do |p| %>
+            <%= render "similar_profile_card", profile: p %>
+          <% end %>
+        </div>
+      </section>
+    <% end %>
+  </main>
+
+  <%= render "listing_footer" %>
+</div>

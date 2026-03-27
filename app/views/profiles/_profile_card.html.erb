@@ -1,0 +1,53 @@
+<% user = profile.user %>
+<% age = profile_age_years(profile) %>
+<% match_pct = profile_match_percent(profile, current_user) %>
+<% online = profile_online?(user) %>
+<div class="profile-card-browse">
+  <div class="profile-card-browse__media">
+    <%= image_tag "https://i.pravatar.cc/400?u=#{user.id}", alt: "", class: "profile-card-browse__img", loading: "lazy", width: 400, height: 480 %>
+    <% if user.premium? %>
+      <span class="profile-card-browse__ribbon profile-card-browse__ribbon--premium">Premium</span>
+    <% end %>
+    <% if profile.verified? %>
+      <span class="profile-card-browse__ribbon profile-card-browse__ribbon--verified">Verified</span>
+    <% end %>
+    <% if profile_recommended?(profile, current_user) %>
+      <span class="profile-card-browse__badge profile-card-browse__badge--rec">Recommended</span>
+    <% elsif profile_featured?(profile) %>
+      <span class="profile-card-browse__badge profile-card-browse__badge--feat">Featured</span>
+    <% elsif profile_new?(profile) %>
+      <span class="profile-card-browse__badge profile-card-browse__badge--new">New</span>
+    <% end %>
+    <span class="profile-card-browse__match"><%= match_pct %>% Match</span>
+  </div>
+  <div class="profile-card-browse__body">
+    <h3 class="profile-card-browse__name"><%= profile_display_name(profile) %><% if age %>, <%= age %><% end %></h3>
+    <p class="profile-card-browse__status">
+      <% if online %>
+        <span class="profile-card-browse__dot profile-card-browse__dot--on"></span> Online
+      <% else %>
+        <span class="profile-card-browse__dot profile-card-browse__dot--away"></span>
+        Last active <%= user.last_seen_at ? time_ago_in_words(user.last_seen_at) + " ago" : "recently" %>
+      <% end %>
+    </p>
+    <% line = [profile_location_line(profile), profile_education_job(profile)].compact %>
+    <% if line.any? %>
+      <p class="profile-card-browse__meta"><%= safe_join(line, " • ") %></p>
+    <% end %>
+    <div class="profile-card-browse__tags">
+      <% if profile.religion.present? %>
+        <span class="profile-card-browse__tag"><%= profile.religion %></span>
+      <% end %>
+      <% if profile.mother_tongue.present? %>
+        <span class="profile-card-browse__tag"><%= profile.mother_tongue %></span>
+      <% end %>
+    </div>
+    <div class="profile-card-browse__actions">
+      <%= link_to "View Profile", profile_path(profile), class: "btn btn--primary btn--sm profile-card-browse__btn" %>
+      <button type="button" class="profile-card-browse__bookmark" aria-label="Save profile">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      </button>
+      <%= link_to "Send Interest", "#", class: "btn btn--coral btn--sm profile-card-browse__interest" %>
+    </div>
+  </div>
+</div>
