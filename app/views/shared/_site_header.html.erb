@@ -8,8 +8,8 @@
     <% end %>
 
     <nav class="site-nav" aria-label="Primary">
-      <%= link_to "Search", "#quick-search", class: "site-nav__link" %>
-      <%= link_to "Browse", "#featured-profiles", class: "site-nav__link" %>
+      <%= link_to "Search", user_signed_in? ? profiles_path : "#quick-search", class: "site-nav__link" %>
+      <%= link_to "Browse", user_signed_in? ? profiles_path : "#featured-profiles", class: "site-nav__link" %>
       <%= link_to "How it Works", "#how-verified", class: "site-nav__link" %>
       <%= link_to "Pricing", "#pricing", class: "site-nav__link" %>
     </nav>

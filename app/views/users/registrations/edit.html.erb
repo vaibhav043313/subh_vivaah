@@ -1,0 +1,90 @@
+<% content_for :title, "Account settings — Subh Vivaah" %>
+
+<div class="auth-panel auth-panel--wide">
+  <div class="auth-card">
+    <h1 class="auth-card__title">Account settings</h1>
+    <p class="auth-card__lead">Update your sign-in email, password, or basic profile details.</p>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "auth-form" }) do |f| %>
+      <%= render "users/shared/error_messages", resource: resource %>
+
+      <p class="auth-section-label">Account</p>
+
+      <div class="auth-field">
+        <%= f.label :email, class: "auth-label" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "auth-input" %>
+      </div>
+
+      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+        <p class="auth-hint">Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
+      <% end %>
+
+      <div class="auth-field">
+        <%= f.label :password, class: "auth-label" do %>
+          New password
+          <span class="auth-hint">(leave blank to keep current)</span>
+        <% end %>
+        <%= f.password_field :password, autocomplete: "new-password", class: "auth-input" %>
+        <% if @minimum_password_length %>
+          <p class="auth-hint"><%= @minimum_password_length %> characters minimum</p>
+        <% end %>
+      </div>
+
+      <div class="auth-field">
+        <%= f.label :password_confirmation, "Confirm new password", class: "auth-label" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "auth-input" %>
+      </div>
+
+      <div class="auth-field">
+        <%= f.label :current_password, class: "auth-label" do %>
+          Current password
+          <span class="auth-hint">(required to confirm changes)</span>
+        <% end %>
+        <%= f.password_field :current_password, autocomplete: "current-password", class: "auth-input" %>
+      </div>
+
+      <% profile = resource.profile || resource.build_profile %>
+      <%= f.fields_for :profile, profile do |pf| %>
+        <p class="auth-section-label">Profile basics</p>
+
+        <div class="auth-field">
+          <%= pf.label :first_name, class: "auth-label" %>
+          <%= pf.text_field :first_name, class: "auth-input" %>
+        </div>
+
+        <div class="auth-field">
+          <%= pf.label :last_name, class: "auth-label" %>
+          <%= pf.text_field :last_name, class: "auth-input" %>
+        </div>
+
+        <div class="auth-field">
+          <%= pf.label :date_of_birth, class: "auth-label" %>
+          <%= pf.date_field :date_of_birth, class: "auth-input", max: 18.years.ago.to_date, min: 80.years.ago.to_date %>
+        </div>
+
+        <div class="auth-field">
+          <%= pf.label :gender, class: "auth-label" %>
+          <%= pf.select :gender, Profile.genders.keys.map { |k| [k.to_s.humanize, k] }, {}, { class: "auth-input" } %>
+        </div>
+      <% end %>
+
+      <div class="auth-actions">
+        <%= f.submit "Save changes", class: "btn btn--primary" %>
+      </div>
+    <% end %>
+
+    <div class="auth-divider">or</div>
+
+    <p class="auth-footer-links" style="margin-top: 0;">
+      <%= link_to "Back to home", root_path %>
+      ·
+      <%= link_to "Browse profiles", profiles_path %>
+    </p>
+  </div>
+
+  <div class="auth-card auth-card--danger" style="margin-top: 1.25rem;">
+    <h2 class="auth-card__title" style="font-size: 1.125rem;">Cancel account</h2>
+    <p class="auth-card__lead">This will permanently remove your account and associated data.</p>
+    <%= button_to "Cancel my account", registration_path(resource_name), method: :delete, class: "btn btn--outline", form: { data: { turbo_confirm: "Are you sure? This cannot be undone." } } %>
+  </div>
+</div>

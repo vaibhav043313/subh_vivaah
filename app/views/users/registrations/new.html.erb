@@ -1,0 +1,70 @@
+<% content_for :title, "Create account — Subh Vivaah" %>
+
+<div class="auth-panel auth-panel--wide">
+  <div class="auth-card">
+    <h1 class="auth-card__title">Create your account</h1>
+    <p class="auth-card__lead">Join Subh Vivaah with a verified, respectful community. You’ll use these details to sign in.</p>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "auth-form" }) do |f| %>
+      <%= render "users/shared/error_messages", resource: resource %>
+
+      <p class="auth-section-label">Account</p>
+
+      <div class="auth-field">
+        <%= f.label :email, "Email", class: "auth-label" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "auth-input", placeholder: "you@example.com" %>
+      </div>
+
+      <div class="auth-field">
+        <%= f.label :password, class: "auth-label" do %>
+          Password
+          <% if @minimum_password_length %>
+            <span class="auth-hint">(<%= @minimum_password_length %> characters minimum)</span>
+          <% end %>
+        <% end %>
+        <%= f.password_field :password, autocomplete: "new-password", class: "auth-input", placeholder: "Create a strong password" %>
+      </div>
+
+      <div class="auth-field">
+        <%= f.label :password_confirmation, "Confirm password", class: "auth-label" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "auth-input", placeholder: "Repeat password" %>
+      </div>
+
+      <%= f.fields_for :profile do |pf| %>
+        <p class="auth-section-label">About you</p>
+        <p class="auth-hint auth-field--hint">This helps us show relevant matches. You can add more detail later.</p>
+
+        <div class="auth-field">
+          <%= pf.label :first_name, "First name", class: "auth-label" %>
+          <%= pf.text_field :first_name, autocomplete: "given-name", class: "auth-input", placeholder: "First name" %>
+        </div>
+
+        <div class="auth-field">
+          <%= pf.label :last_name, "Last name", class: "auth-label" %>
+          <%= pf.text_field :last_name, autocomplete: "family-name", class: "auth-input", placeholder: "Optional" %>
+        </div>
+
+        <div class="auth-field">
+          <%= pf.label :date_of_birth, "Date of birth", class: "auth-label" %>
+          <%= pf.date_field :date_of_birth, class: "auth-input", max: 18.years.ago.to_date, min: 80.years.ago.to_date %>
+        </div>
+
+        <div class="auth-field">
+          <%= pf.label :gender, class: "auth-label" %>
+          <%= pf.select :gender, Profile.genders.keys.map { |k| [k.to_s.humanize, k] }, { prompt: "Select gender" }, { class: "auth-input" } %>
+        </div>
+
+        <%= pf.hidden_field :country, value: "India" %>
+      <% end %>
+
+      <div class="auth-actions">
+        <%= f.submit "Create account", class: "btn btn--primary" %>
+      </div>
+    <% end %>
+
+    <div class="auth-footer-links">
+      Already have an account?
+      <%= link_to "Sign in", new_user_session_path %>
+    </div>
+  </div>
+</div>
