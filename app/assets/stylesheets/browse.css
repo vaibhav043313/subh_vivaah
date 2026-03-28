@@ -27,11 +27,6 @@
   flex: 1;
 }
 
-.browse-layout__sidebar {
-  position: sticky;
-  top: 72px;
-}
-
 .browse-layout__main {
   min-width: 0;
 }
