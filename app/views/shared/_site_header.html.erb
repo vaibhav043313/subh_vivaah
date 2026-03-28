@@ -1,4 +1,6 @@
-<header class="site-header">
+<header class="site-header" data-controller="mobile-menu">
+  <div class="site-header__backdrop" data-action="click->mobile-menu#closeOnBackdrop" aria-hidden="true"></div>
+
   <div class="site-header__inner container">
     <%= link_to root_path, class: "site-logo" do %>
       <span class="site-logo__icon" aria-hidden="true">
@@ -7,7 +9,16 @@
       <span class="site-logo__text">Subh Vivaah</span>
     <% end %>
 
-    <nav class="site-nav" aria-label="Primary">
+    <button type="button" class="site-header__menu-btn" aria-expanded="false" aria-controls="site-primary-nav" data-mobile-menu-target="toggle" data-action="mobile-menu#toggle">
+      <span class="visually-hidden">Menu</span>
+      <span class="site-header__menu-bars" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+    </button>
+
+    <nav id="site-primary-nav" class="site-nav" aria-label="Primary" data-mobile-menu-target="panel" data-action="click->mobile-menu#closeOnLink">
       <%= link_to "Search", user_signed_in? ? profiles_path : "#quick-search", class: "site-nav__link" %>
       <%= link_to "Browse", user_signed_in? ? profiles_path : "#featured-profiles", class: "site-nav__link" %>
       <%= link_to "How it Works", "#how-verified", class: "site-nav__link" %>

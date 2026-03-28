@@ -1,4 +1,6 @@
-<header class="app-header">
+<header class="app-header" data-controller="mobile-menu">
+  <div class="app-header__backdrop" data-action="click->mobile-menu#closeOnBackdrop" aria-hidden="true"></div>
+
   <div class="app-header__inner container container--wide">
     <div class="app-header__logo-wrap">
     <%= link_to root_path, class: "site-logo" do %>
@@ -9,20 +11,31 @@
     <% end %>
     </div>
 
-    <nav class="app-header__nav" aria-label="App">
-      <%= link_to "Home", root_path, class: "app-header__nav-link #{'is-active' if controller_name == 'home'}" %>
-      <%= link_to "Search & Browse", profiles_path, class: "app-header__nav-link #{'is-active' if controller_name == 'profiles' && action_name == 'index'}" %>
-      <%= link_to "Messages", "#", class: "app-header__nav-link" %>
-      <%= link_to "Membership", root_path(anchor: "pricing"), class: "app-header__nav-link" %>
-    </nav>
-
-    <%= form_with url: profiles_path, method: :get, local: true, class: "app-header__search" do %>
-      <span class="app-header__search-icon" aria-hidden="true">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <button type="button" class="app-header__menu-btn" aria-expanded="false" aria-controls="app-header-menu" data-mobile-menu-target="toggle" data-action="mobile-menu#toggle">
+      <span class="visually-hidden">Menu</span>
+      <span class="app-header__menu-bars" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
       </span>
-      <label class="visually-hidden" for="header-search-q">Search by name</label>
-      <input type="search" id="header-search-q" name="q" value="<%= params[:q] %>" placeholder="Search by name, ID…" class="app-header__search-input" autocomplete="off">
-    <% end %>
+    </button>
+
+    <div id="app-header-menu" class="app-header__sheet" data-mobile-menu-target="panel" data-action="click->mobile-menu#closeOnLink">
+      <nav class="app-header__nav" aria-label="App">
+        <%= link_to "Home", root_path, class: "app-header__nav-link #{'is-active' if controller_name == 'home'}" %>
+        <%= link_to "Search & Browse", profiles_path, class: "app-header__nav-link #{'is-active' if controller_name == 'profiles' && action_name == 'index'}" %>
+        <%= link_to "Messages", "#", class: "app-header__nav-link" %>
+        <%= link_to "Membership", root_path(anchor: "pricing"), class: "app-header__nav-link" %>
+      </nav>
+
+      <%= form_with url: profiles_path, method: :get, local: true, class: "app-header__search", data: { action: "submit->mobile-menu#close" } do %>
+        <span class="app-header__search-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </span>
+        <label class="visually-hidden" for="header-search-q">Search by name</label>
+        <input type="search" id="header-search-q" name="q" value="<%= params[:q] %>" placeholder="Search by name, ID…" class="app-header__search-input" autocomplete="off">
+      <% end %>
+    </div>
 
     <div class="app-header__actions">
       <%= link_to "My Matches", "#", class: "btn btn--primary btn--sm app-header__matches" %>
