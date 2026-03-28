@@ -1,43 +1,40 @@
 <% content_for :title, "My subscription — Subh Vivaah" %>
-<% content_for :head do %>
-  <%= stylesheet_link_tag "site_pages", "data-turbo-track": "reload" %>
-<% end %>
 
-<div class="site-page">
+<div class="<%= site_page_shell_class %>">
   <%= render "shared/app_header" %>
 
-  <main class="site-page__main">
+  <main class="<%= site_page_main_class %>">
     <div class="container">
       <%= render "shared/flash_strip" %>
-      <h1 class="site-page__title">Subscription</h1>
-      <p class="site-page__lead">Current plan and recent subscription history.</p>
+      <h1 class="<%= site_page_title_class %>">Subscription</h1>
+      <p class="<%= site_page_lead_class %>">Current plan and recent subscription history.</p>
 
       <% if @subscription %>
-        <div class="card" style="padding: 1.5rem 1.65rem; margin-bottom: 2rem;">
-          <h2 class="section__title" style="font-size: 1.125rem; margin-bottom: 0.75rem;">Active plan</h2>
-          <dl style="margin: 0; display: grid; gap: 0.5rem; font-size: 0.9375rem;">
-            <div><dt style="display: inline; font-weight: 600;">Plan:</dt> <dd style="display: inline; margin: 0;"><%= @subscription.plan_key %></dd></div>
-            <div><dt style="display: inline; font-weight: 600;">Status:</dt> <dd style="display: inline; margin: 0;"><%= @subscription.status %></dd></div>
+        <div class="card mb-8 p-6 sm:px-[1.65rem] sm:py-6">
+          <h2 class="section__title mb-3 text-lg">Active plan</h2>
+          <dl class="m-0 grid gap-2 text-[15px]">
+            <div><dt class="inline font-semibold">Plan:</dt> <dd class="inline m-0"><%= @subscription.plan_key %></dd></div>
+            <div><dt class="inline font-semibold">Status:</dt> <dd class="inline m-0"><%= @subscription.status %></dd></div>
             <% if @subscription.starts_on %>
-              <div><dt style="display: inline; font-weight: 600;">Starts:</dt> <dd style="display: inline; margin: 0;"><%= @subscription.starts_on.strftime("%-d %b %Y") %></dd></div>
+              <div><dt class="inline font-semibold">Starts:</dt> <dd class="inline m-0"><%= @subscription.starts_on.strftime("%-d %b %Y") %></dd></div>
             <% end %>
             <% if @subscription.ends_on %>
-              <div><dt style="display: inline; font-weight: 600;">Ends:</dt> <dd style="display: inline; margin: 0;"><%= @subscription.ends_on.strftime("%-d %b %Y") %></dd></div>
+              <div><dt class="inline font-semibold">Ends:</dt> <dd class="inline m-0"><%= @subscription.ends_on.strftime("%-d %b %Y") %></dd></div>
             <% end %>
           </dl>
-          <%= link_to "Upgrade or compare plans", pricing_path, class: "btn btn--primary btn--sm", style: "margin-top: 1rem;" %>
+          <%= link_to "Upgrade or compare plans", pricing_path, class: "btn btn--primary btn--sm mt-4" %>
         </div>
       <% else %>
-        <div class="card" style="padding: 1.5rem 1.65rem; margin-bottom: 2rem;">
-          <p class="site-prose" style="margin: 0 0 1rem;">You do not have an active paid subscription on file.</p>
+        <div class="card mb-8 p-6 sm:px-[1.65rem] sm:py-6">
+          <p class="<%= site_prose_inline_class %> mb-4">You do not have an active paid subscription on file.</p>
           <%= link_to "View membership plans", pricing_path, class: "btn btn--primary btn--sm" %>
         </div>
       <% end %>
 
       <% if @history.any? %>
-        <h2 class="section__title" style="font-size: 1.125rem; margin-bottom: 0.75rem;">History</h2>
-        <div class="card" style="padding: 0; overflow-x: auto;">
-          <table class="data-table">
+        <h2 class="section__title mb-3 text-lg">History</h2>
+        <div class="card overflow-x-auto p-0">
+          <table class="<%= site_data_table_class %>">
             <thead>
               <tr>
                 <th>Plan</th>
@@ -64,7 +61,7 @@
         </div>
       <% end %>
 
-      <p style="margin-top: 1.5rem;">
+      <p class="mt-6">
         <%= link_to "Payment history", payments_path, class: "btn btn--outline btn--sm" %>
       </p>
     </div>

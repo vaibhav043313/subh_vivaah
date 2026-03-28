@@ -22,7 +22,7 @@ export default class extends Controller {
     })
       .then((response) => {
         if (response.ok) {
-          this.element.classList.remove("notif-item--unread")
+          this.element.removeAttribute("data-notification-unread")
         } else {
           this.unreadValue = true
         }

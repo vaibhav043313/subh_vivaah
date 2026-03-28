@@ -1,25 +1,22 @@
 <% content_for :title, "#{@post.title} — Subh Vivaah" %>
-<% content_for :head do %>
-  <%= stylesheet_link_tag "site_pages", "data-turbo-track": "reload" %>
-<% end %>
 
-<div class="site-page">
+<div class="<%= site_page_shell_class %>">
   <%= render "shared/app_header" %>
 
-  <main class="site-page__main">
+  <main class="<%= site_page_main_class %>">
     <div class="container">
       <%= render "shared/flash_strip" %>
-      <p class="site-page__lead" style="margin-bottom: 0.5rem;">
+      <p class="<%= site_page_lead_class(mb: "mb-2") %>">
         <%= link_to "← All articles", blog_posts_path %>
       </p>
-      <p class="blog-card__meta" style="margin: 0 0 0.5rem;">
+      <p class="mb-2 mt-0 text-xs text-[var(--color-muted)]">
         <%= @post.published_at&.strftime("%-d %B %Y") %>
       </p>
-      <h1 class="site-page__title"><%= @post.title %></h1>
+      <h1 class="<%= site_page_title_class %>"><%= @post.title %></h1>
       <% if @post.excerpt.present? %>
-        <p class="site-page__lead"><%= @post.excerpt %></p>
+        <p class="<%= site_page_lead_class %>"><%= @post.excerpt %></p>
       <% end %>
-      <div class="site-prose card" style="padding: 1.5rem 1.65rem;">
+      <div class="<%= site_prose_card_class %> [&_p]:mb-4 [&_p:last-child]:mb-0">
         <%= simple_format @post.body %>
       </div>
     </div>

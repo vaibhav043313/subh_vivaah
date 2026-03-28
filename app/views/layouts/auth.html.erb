@@ -16,6 +16,7 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "auth", "data-turbo-track": "reload" %>
     <%= yield :head %>
+    <%= render "shared/tailwind_cdn" %>
     <%= javascript_importmap_tags %>
   </head>
   <%# Full document navigations only: Turbo Drive + Devise session POST→redirect often fails until refresh. %>

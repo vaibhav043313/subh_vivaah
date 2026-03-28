@@ -1,40 +1,37 @@
 <% content_for :title, "Blog & articles — Subh Vivaah" %>
-<% content_for :head do %>
-  <%= stylesheet_link_tag "site_pages", "data-turbo-track": "reload" %>
-<% end %>
 
-<div class="site-page">
+<div class="<%= site_page_shell_class %>">
   <%= render "shared/app_header" %>
 
-  <main class="site-page__main">
+  <main class="<%= site_page_main_class %>">
     <div class="container">
       <%= render "shared/flash_strip" %>
-      <h1 class="site-page__title">Blog &amp; articles</h1>
-      <p class="site-page__lead">
+      <h1 class="<%= site_page_title_class %>">Blog &amp; articles</h1>
+      <p class="<%= site_page_lead_class %>">
         Tips, stories, and guides for your matrimony journey.
       </p>
 
       <% if @posts.any? %>
-        <ul class="blog-list">
+        <ul class="m-0 flex list-none flex-col gap-4 p-0">
           <% @posts.each do |post| %>
             <li>
-              <article class="blog-card card">
-                <p class="blog-card__meta">
+              <article class="card px-[1.35rem] py-5">
+                <p class="mb-1.5 m-0 text-xs text-[var(--color-muted)]">
                   <%= post.published_at&.strftime("%-d %b %Y") %>
                 </p>
-                <h2 class="blog-card__title">
+                <h2 class="mb-2 mt-0 text-lg font-bold">
                   <%= link_to post.title, blog_post_path(post.slug) %>
                 </h2>
                 <% if post.excerpt.present? %>
-                  <p class="blog-card__excerpt"><%= post.excerpt %></p>
+                  <p class="m-0 text-[15px] leading-normal text-neutral-700"><%= post.excerpt %></p>
                 <% end %>
-                <%= link_to "Read more →", blog_post_path(post.slug), class: "btn btn--outline btn--sm", style: "margin-top: 0.75rem;" %>
+                <%= link_to "Read more →", blog_post_path(post.slug), class: "btn btn--outline btn--sm mt-3" %>
               </article>
             </li>
           <% end %>
         </ul>
       <% else %>
-        <p class="site-page__lead" style="margin-bottom: 0;">No articles yet. Check back soon.</p>
+        <p class="<%= site_page_lead_class(mb: "mb-0") %>">No articles yet. Check back soon.</p>
       <% end %>
     </div>
   </main>

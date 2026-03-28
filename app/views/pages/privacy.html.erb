@@ -1,19 +1,16 @@
 <% content_for :title, "Privacy policy — Subh Vivaah" %>
-<% content_for :head do %>
-  <%= stylesheet_link_tag "site_pages", "data-turbo-track": "reload" %>
-<% end %>
 
-<div class="site-page">
+<div class="<%= site_page_shell_class %>">
   <%= render "shared/app_header" %>
 
-  <main class="site-page__main">
+  <main class="<%= site_page_main_class %>">
     <div class="container">
       <%= render "shared/flash_strip" %>
-      <h1 class="site-page__title">Privacy policy</h1>
-      <p class="site-page__lead">
+      <h1 class="<%= site_page_title_class %>">Privacy policy</h1>
+      <p class="<%= site_page_lead_class %>">
         How we handle your information on Subh Vivaah. This is a placeholder summary — replace with full legal policy before launch.
       </p>
-      <div class="site-prose card" style="padding: 1.5rem 1.65rem;">
+      <div class="<%= site_prose_card_class %>">
         <h2>What we collect</h2>
         <p>We collect information you provide (profile, messages to support, payment-related data when checkout is enabled) and technical data needed to run the site (logs, device/browser type) in line with common web practice.</p>
 

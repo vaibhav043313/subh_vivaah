@@ -1,19 +1,16 @@
 <% content_for :title, "Terms & conditions — Subh Vivaah" %>
-<% content_for :head do %>
-  <%= stylesheet_link_tag "site_pages", "data-turbo-track": "reload" %>
-<% end %>
 
-<div class="site-page">
+<div class="<%= site_page_shell_class %>">
   <%= render "shared/app_header" %>
 
-  <main class="site-page__main">
+  <main class="<%= site_page_main_class %>">
     <div class="container">
       <%= render "shared/flash_strip" %>
-      <h1 class="site-page__title">Terms &amp; conditions</h1>
-      <p class="site-page__lead">
+      <h1 class="<%= site_page_title_class %>">Terms &amp; conditions</h1>
+      <p class="<%= site_page_lead_class %>">
         Please read these terms before using Subh Vivaah. This is a concise placeholder; replace with counsel-approved legal text before production.
       </p>
-      <div class="site-prose card" style="padding: 1.5rem 1.65rem;">
+      <div class="<%= site_prose_card_class %>">
         <h2>1. Using the service</h2>
         <p>By accessing Subh Vivaah you agree to use the platform lawfully, respect other members, and provide accurate information to the best of your ability.</p>
 

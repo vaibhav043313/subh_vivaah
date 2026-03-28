@@ -1,45 +1,43 @@
 <% content_for :title, "Notifications — Subh Vivaah" %>
-<% content_for :head do %>
-  <%= stylesheet_link_tag "site_pages", "data-turbo-track": "reload" %>
-<% end %>
 
-<div class="site-page">
+<div class="<%= site_page_shell_class %>">
   <%= render "shared/app_header" %>
 
-  <main class="site-page__main">
+  <main class="<%= site_page_main_class %>">
     <div class="container">
       <%= render "shared/flash_strip" %>
-      <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 1rem;">
-        <h1 class="site-page__title" style="margin: 0;">Notifications</h1>
+      <div class="mb-4 flex flex-wrap items-baseline justify-between gap-4">
+        <h1 class="<%= site_page_title_class(mb: "mb-0") %>">Notifications</h1>
         <% unread = current_user.notifications.unread.count %>
         <% if unread.positive? %>
           <%= button_to "Mark all read", mark_all_read_notifications_path, method: :patch, class: "btn btn--outline btn--sm", form: { data: { turbo: true } } %>
         <% end %>
       </div>
-      <p class="site-page__lead">Profile visits, new messages, and other alerts appear here.</p>
+      <p class="<%= site_page_lead_class %>">Profile visits, new messages, and other alerts appear here.</p>
 
       <% if @notifications.any? %>
-        <ul class="notif-list card" style="padding: 0 1.25rem;">
+        <ul class="<%= site_notif_list_class %>">
           <% @notifications.each do |n| %>
             <li
-              class="notif-item<%= ' notif-item--unread' if n.read_at.nil? %>"
+              class="<%= site_notif_item_class %>"
               <% if n.read_at.nil? %>
+                data-notification-unread="true"
                 data-controller="notification-read"
                 data-notification-read-url-value="<%= read_notification_path(n) %>"
                 data-notification-read-unread-value="true"
                 data-action="click->notification-read#markOnce"
               <% end %>
             >
-              <div class="notif-item__body">
-                <p class="notif-item__title"><%= n.title %></p>
+              <div class="min-w-0 flex-[1_1_200px]">
+                <p class="mb-1 mt-0 text-[15px] font-semibold"><%= n.title %></p>
                 <% if n.body.present? %>
-                  <p class="notif-item__text"><%= n.body %></p>
+                  <p class="mb-2 mt-0 text-sm text-neutral-700"><%= n.body %></p>
                 <% end %>
-                <p class="notif-item__time"><%= time_ago_in_words(n.created_at) %> ago</p>
+                <p class="mt-1.5 mb-0 text-xs text-[var(--color-muted)]"><%= time_ago_in_words(n.created_at) %> ago</p>
               </div>
               <% path = notification_action_path(n) %>
               <% if path.present? %>
-                <div class="notif-item__actions">
+                <div class="flex flex-wrap items-center gap-2">
                   <%= link_to "Open", path, class: "btn btn--outline btn--sm" %>
                 </div>
               <% end %>
@@ -47,7 +45,7 @@
           <% end %>
         </ul>
       <% else %>
-        <p class="site-prose">You have no notifications yet. When someone messages you or views your profile, you will see it here.</p>
+        <p class="<%= site_prose_inline_class %>">You have no notifications yet. When someone messages you or views your profile, you will see it here.</p>
       <% end %>
     </div>
   </main>

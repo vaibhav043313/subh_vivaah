@@ -1,0 +1,12 @@
+<%# Tailwind Play CDN — utilities only; preflight off so application.css / auth.css stay in control. %>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    corePlugins: { preflight: false }
+  }
+  document.addEventListener("turbo:load", function () {
+    if (typeof tailwind !== "undefined" && typeof tailwind.refresh === "function") {
+      tailwind.refresh()
+    }
+  })
+</script>

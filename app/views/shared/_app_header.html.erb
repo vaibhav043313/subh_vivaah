@@ -40,10 +40,10 @@
       <% if user_signed_in? %>
         <%= link_to "My Matches", "#", class: "btn btn--primary btn--sm app-header__matches" %>
         <% n_unread = unread_notifications_count %>
-        <%= link_to notifications_path, class: "app-header__icon-btn app-header__notif", "aria-label": "Notifications" do %>
+        <%= link_to notifications_path, class: "app-header__icon-btn relative no-underline", "aria-label": "Notifications" do %>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
           <% if n_unread.positive? %>
-            <span class="app-header__notif-badge"><%= n_unread > 99 ? "99+" : n_unread %></span>
+            <span class="absolute -right-1 -top-1 flex min-h-[1.1rem] min-w-[1.1rem] items-center justify-center rounded-full bg-[#ff5a60] px-1 text-[0.65rem] font-bold leading-none text-white"><%= n_unread > 99 ? "99+" : n_unread %></span>
           <% end %>
         <% end %>
 
@@ -58,22 +58,22 @@
               <span class="app-header__user-tier"><%= current_user.premium? ? "Premium Member" : "Member" %></span>
             </span>
           </summary>
-          <div class="app-header__dropdown app-header__dropdown--scroll">
+          <div class="app-header__dropdown max-h-[min(70vh,440px)] overflow-y-auto">
             <%= link_to "Notifications", notifications_path, class: "app-header__dropdown-link" %>
-            <div class="app-header__dropdown-section">
-              <p class="app-header__dropdown-label">Membership</p>
+            <div class="mt-1.5 border-t border-[var(--color-border)] pt-1.5 first-of-type:mt-0 first-of-type:border-t-0 first-of-type:pt-0">
+              <p class="px-2.5 pb-0.5 pt-1.5 text-[11px] font-bold uppercase tracking-wider text-[var(--color-muted)]">Membership</p>
               <%= link_to "Subscription", subscription_path, class: "app-header__dropdown-link" %>
               <%= link_to "Payment history", payments_path, class: "app-header__dropdown-link" %>
               <%= link_to "Upgrade / pricing", pricing_path, class: "app-header__dropdown-link" %>
             </div>
-            <div class="app-header__dropdown-section">
-              <p class="app-header__dropdown-label">Help &amp; legal</p>
+            <div class="mt-1.5 border-t border-[var(--color-border)] pt-1.5 first-of-type:mt-0 first-of-type:border-t-0 first-of-type:pt-0">
+              <p class="px-2.5 pb-0.5 pt-1.5 text-[11px] font-bold uppercase tracking-wider text-[var(--color-muted)]">Help &amp; legal</p>
               <%= link_to "FAQ", faq_path, class: "app-header__dropdown-link" %>
               <%= link_to "Feedback", feedback_path, class: "app-header__dropdown-link" %>
               <%= link_to "Terms", terms_path, class: "app-header__dropdown-link" %>
               <%= link_to "Privacy", privacy_path, class: "app-header__dropdown-link" %>
             </div>
-            <div class="app-header__dropdown-section">
+            <div class="mt-1.5 border-t border-[var(--color-border)] pt-1.5 first-of-type:mt-0 first-of-type:border-t-0 first-of-type:pt-0">
               <%= link_to "Account settings", edit_user_registration_path, class: "app-header__dropdown-link" %>
               <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete }, class: "app-header__dropdown-link" %>
             </div>
