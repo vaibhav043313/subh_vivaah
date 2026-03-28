@@ -1,0 +1,18 @@
+<% content_for :title, "Messages — Subh Vivaah" %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "browse", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "messaging", "data-turbo-track": "reload" %>
+<% end %>
+
+<div class="messaging-page">
+  <%= render "shared/app_header" %>
+  <div class="container container--wide app-flash-wrap">
+    <%= render "shared/flash_strip" %>
+  </div>
+
+  <div class="messaging messaging--thread-open container container--wide">
+    <%= render "sidebar" %>
+    <%= render "thread" %>
+    <%= render "connections_panel" %>
+  </div>
+</div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_28_120002) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_28_140000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,6 +42,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_28_120002) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "conversations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "last_message_at"
+    t.string "last_message_body", limit: 240
+    t.datetime "updated_at", null: false
+    t.bigint "user_higher_id", null: false
+    t.bigint "user_lower_id", null: false
+    t.index ["user_higher_id"], name: "index_conversations_on_user_higher_id"
+    t.index ["user_lower_id", "user_higher_id"], name: "index_conversations_on_user_lower_id_and_user_higher_id", unique: true
+    t.index ["user_lower_id"], name: "index_conversations_on_user_lower_id"
+  end
+
   create_table "matches", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "matched_user_id", null: false
@@ -52,6 +64,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_28_120002) do
     t.index ["score"], name: "index_matches_on_score"
     t.index ["user_id", "matched_user_id"], name: "index_matches_on_user_id_and_matched_user_id", unique: true
     t.index ["user_id"], name: "index_matches_on_user_id"
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.text "body", null: false
+    t.bigint "conversation_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "read_at"
+    t.bigint "sender_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conversation_id", "created_at"], name: "index_messages_on_conversation_id_and_created_at"
+    t.index ["conversation_id"], name: "index_messages_on_conversation_id"
+    t.index ["sender_id"], name: "index_messages_on_sender_id"
   end
 
   create_table "preferences", force: :cascade do |t|
@@ -125,7 +149,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_28_120002) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "conversations", "users", column: "user_higher_id"
+  add_foreign_key "conversations", "users", column: "user_lower_id"
   add_foreign_key "matches", "users"
+  add_foreign_key "messages", "conversations"
+  add_foreign_key "messages", "users", column: "sender_id"
   add_foreign_key "preferences", "users"
   add_foreign_key "profiles", "users"
 end

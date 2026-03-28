@@ -17,4 +17,8 @@ Rails.application.routes.draw do
   root "home#index"
 
   resources :profiles, only: [:index, :create, :show]
+
+  resources :conversations, only: [:index, :show, :create] do
+    resources :messages, only: [:create]
+  end
 end

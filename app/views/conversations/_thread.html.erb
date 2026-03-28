@@ -1,0 +1,73 @@
+<% peer = @peer_profile %>
+<% peer_user = peer.user %>
+<% age = profile_age_years(peer) %>
+<% match_pct = profile_match_percent(peer, current_user) %>
+
+<main class="messaging-main" aria-label="Messages with <%= profile_display_name(peer) %>">
+  <%= link_to conversations_path(q: params[:q].presence), class: "messaging-back" do %>
+    <span aria-hidden="true">←</span> All conversations
+  <% end %>
+
+  <header class="messaging-thread-head">
+    <div class="messaging-thread-head__profile">
+      <%= image_tag messaging_peer_thumb(peer), alt: "", class: "messaging-thread-head__avatar" %>
+      <div>
+        <h1 class="messaging-thread-head__name"><%= profile_display_name(peer) %><% if age %>, <%= age %><% end %></h1>
+        <p class="messaging-thread-head__meta">
+          <%= [ peer.city, peer.profession ].compact_blank.join(" • ").presence || "Member" %>
+        </p>
+        <p class="messaging-thread-head__score">Match score <%= match_pct %>%</p>
+        <% if profile_online?(peer_user) %>
+          <p class="messaging-thread-head__status">Available for chat</p>
+        <% end %>
+      </div>
+    </div>
+    <div class="messaging-thread-head__actions">
+      <%= link_to "Profile", profile_path(peer), class: "messaging-thread-head__action" %>
+      <span class="messaging-thread-head__action" title="Coming soon">Call</span>
+      <span class="messaging-thread-head__action" title="Coming soon">Video</span>
+      <span class="messaging-thread-head__action" title="Coming soon">Block</span>
+      <span class="messaging-thread-head__action" title="Coming soon">Report</span>
+    </div>
+  </header>
+
+  <div class="messaging-messages" id="conversation-messages">
+    <% if @messages.any? %>
+      <% @messages.each do |message| %>
+        <% mine = message.sender_id == current_user.id %>
+        <article class="messaging-bubble messaging-bubble--<%= mine ? "out" : "in" %>">
+          <%= simple_format(message.body, {}, wrapper_tag: "div") %>
+          <div class="messaging-bubble__meta">
+            <%= messaging_time_label(message.created_at) %>
+            <% if mine %>
+              · <%= message.read_at.present? ? "Read" : "Sent" %>
+            <% end %>
+          </div>
+        </article>
+      <% end %>
+    <% else %>
+      <p class="messaging-system">No messages yet — send a thoughtful note to start the conversation.</p>
+    <% end %>
+  </div>
+
+  <div class="messaging-composer">
+    <div class="messaging-composer__quick" aria-hidden="true">
+      <span class="messaging-composer__chip">Introduce</span>
+      <span class="messaging-composer__chip">Ask details</span>
+      <span class="messaging-composer__chip">Share interest</span>
+    </div>
+    <%= form_with url: conversation_messages_path(@conversation), scope: :message, method: :post, local: true, class: "messaging-composer__form" do |f| %>
+      <%= f.text_area :body, class: "messaging-composer__field", placeholder: "Write a message…", required: true, maxlength: 10_000, aria: { label: "Message" } %>
+      <div class="messaging-composer__row">
+        <%= f.submit "Send", class: "btn btn--primary" %>
+        <p class="messaging-composer__hint">
+          <% if current_user.premium? %>
+            Premium: unlimited messages. Be respectful — safety tools are available in every thread.
+          <% else %>
+            Free members can connect with courtesy. Upgrade for more daily interests and visibility.
+          <% end %>
+        </p>
+      </div>
+    <% end %>
+  </div>
+</main>

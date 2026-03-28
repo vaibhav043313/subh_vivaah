@@ -1,0 +1,63 @@
+<aside class="messaging-sidebar" aria-label="Conversations">
+  <div class="messaging-sidebar__head">
+    <h2 class="messaging-sidebar__title">Conversations</h2>
+    <%= link_to "Compose interest", "#", class: "btn btn--primary btn--sm messaging-sidebar__compose" %>
+    <div class="messaging-sidebar__tabs" role="tablist" aria-label="Conversation filters">
+      <span class="messaging-sidebar__tab is-active" role="tab" aria-selected="true">All</span>
+      <span class="messaging-sidebar__tab" role="tab" aria-disabled="true" title="Coming soon">New</span>
+      <span class="messaging-sidebar__tab" role="tab" aria-disabled="true" title="Coming soon">Accepted</span>
+    </div>
+    <%= form_with url: conversations_path, method: :get, local: true do %>
+      <%= text_field_tag :q, params[:q], class: "messaging-sidebar__filter", placeholder: "Filter by message text…", autocomplete: "off" %>
+    <% end %>
+  </div>
+
+  <% if @conversations.any? %>
+    <ul class="messaging-sidebar__list">
+      <% @conversations.each do |conversation| %>
+        <% peer = messaging_peer_profile(conversation, current_user) %>
+        <% active = @conversation&.id == conversation.id %>
+        <% unread = conversation.unread_count_for(current_user) %>
+        <li>
+          <%= link_to conversation_path(conversation, q: params[:q].presence), class: "messaging-convo#{' is-active' if active}" do %>
+            <%= image_tag messaging_peer_thumb(peer), alt: "", class: "messaging-convo__avatar" %>
+            <div class="messaging-convo__body">
+              <div class="messaging-convo__row">
+                <p class="messaging-convo__name">
+                  <%= profile_display_name(peer) %>
+                  <% if unread.positive? %>
+                    <span class="messaging-convo__badge"><%= unread > 9 ? "9+" : unread %></span>
+                  <% end %>
+                </p>
+                <% if conversation.last_message_at.present? %>
+                  <time class="messaging-convo__time" datetime="<%= conversation.last_message_at.iso8601 %>">
+                    <%= messaging_time_label(conversation.last_message_at) %>
+                  </time>
+                <% end %>
+              </div>
+              <p class="messaging-convo__snippet">
+                <%= conversation.last_message_body.presence || "No messages yet — say hello." %>
+              </p>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <ul class="messaging-sidebar__list">
+      <li class="messaging-empty" style="padding: 1.5rem 1rem; border: none;">
+        <p class="messaging-empty__text" style="font-size: 0.875rem;">
+          <% if params[:q].present? %>
+            No conversations match your filter.
+          <% else %>
+            No conversations yet. Open a profile and use <strong>Message</strong> to connect.
+          <% end %>
+        </p>
+      </li>
+    </ul>
+  <% end %>
+
+  <div class="messaging-sidebar__foot">
+    Showing <%= @conversations.size %> conversation<%= @conversations.size == 1 ? "" : "s" %>
+  </div>
+</aside>

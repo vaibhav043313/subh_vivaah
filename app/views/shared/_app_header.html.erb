@@ -24,7 +24,7 @@
       <nav class="app-header__nav" aria-label="App">
         <%= link_to "Home", root_path, class: "app-header__nav-link #{'is-active' if controller_name == 'home'}" %>
         <%= link_to "Search & Browse", profiles_path, class: "app-header__nav-link #{'is-active' if controller_name == 'profiles' && action_name == 'index'}" %>
-        <%= link_to "Messages", "#", class: "app-header__nav-link" %>
+        <%= link_to "Messages", conversations_path, class: "app-header__nav-link #{'is-active' if controller_name == 'conversations'}" %>
         <%= link_to "Membership", root_path(anchor: "pricing"), class: "app-header__nav-link" %>
       </nav>
 

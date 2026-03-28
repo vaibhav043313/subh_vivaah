@@ -87,6 +87,7 @@ RSpec.describe "Profiles show", type: :request do
     expect(response.body).to include("Priya")
     expect(response.body).to include("About me")
     expect(response.body).to include("Similar profiles")
+    expect(response.body).to include("Message")
   end
 
   it "returns JSON when requested" do

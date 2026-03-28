@@ -1,0 +1,50 @@
+<aside class="messaging-connections" aria-label="Connections and account">
+  <div class="messaging-connections__block">
+    <h3 class="messaging-connections__title">Connections</h3>
+    <% if @matches_sidebar.any? %>
+      <% @matches_sidebar.each do |match| %>
+        <% mp = match.matched_user.profile %>
+        <% next unless mp %>
+        <%= link_to conversation_path_for_peer(match.matched_user, profile_path(mp)), class: "messaging-conn" do %>
+          <%= image_tag profile_similar_thumb_url(mp), alt: "", class: "messaging-conn__avatar" %>
+          <div class="messaging-conn__body">
+            <p class="messaging-conn__name"><%= profile_display_name(mp) %></p>
+            <p class="messaging-conn__meta">
+              <%= match.status.humanize %> · <%= profile_location_line(mp).presence || "—" %>
+            </p>
+          </div>
+          <span class="messaging-conn__btn">Message</span>
+        <% end %>
+      <% end %>
+    <% else %>
+      <p style="margin:0;font-size:0.8125rem;color:var(--color-muted);">No saved matches yet. Browse profiles to find people you connect with.</p>
+    <% end %>
+  </div>
+
+  <div class="messaging-connections__block">
+    <h3 class="messaging-connections__title">Membership</h3>
+    <div class="messaging-membership">
+      <% if current_user.premium? %>
+        <p>You’re a Premium member. Thank you for supporting Subh Vivaah.</p>
+        <%= link_to "Account settings", edit_user_registration_path, class: "btn btn--outline btn--sm" %>
+      <% else %>
+        <p>Free accounts can message members you open a conversation with. Upgrade for more daily interests and profile boosts.</p>
+        <%= link_to "Upgrade", root_path(anchor: "pricing"), class: "btn btn--primary btn--sm" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="messaging-connections__block">
+    <h3 class="messaging-connections__title">Privacy &amp; safety</h3>
+    <p style="margin:0;font-size:0.8125rem;color:#404040;line-height:1.45;">
+      Never share passwords or payment details in chat. Use <strong>Report</strong> or <strong>Block</strong> (coming soon) if someone makes you uncomfortable.
+    </p>
+  </div>
+
+  <footer class="messaging-footer">
+    <%= link_to "Help", "#" %>
+    <%= link_to "Privacy", "#" %>
+    <%= link_to "Safety", "#" %>
+    <span>© <%= Time.current.year %> Subh Vivaah</span>
+  </footer>
+</aside>
