@@ -8,7 +8,10 @@ class NotificationsController < ApplicationController
   def read
     @notification = current_user.notifications.find(params[:id])
     @notification.mark_read!
-    redirect_back fallback_location: notifications_path
+    respond_to do |format|
+      format.html { redirect_back fallback_location: notifications_path }
+      format.json { head :no_content }
+    end
   end
 
   def mark_all_read

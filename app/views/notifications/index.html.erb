@@ -21,7 +21,15 @@
       <% if @notifications.any? %>
         <ul class="notif-list card" style="padding: 0 1.25rem;">
           <% @notifications.each do |n| %>
-            <li class="notif-item<%= ' notif-item--unread' if n.read_at.nil? %>">
+            <li
+              class="notif-item<%= ' notif-item--unread' if n.read_at.nil? %>"
+              <% if n.read_at.nil? %>
+                data-controller="notification-read"
+                data-notification-read-url-value="<%= read_notification_path(n) %>"
+                data-notification-read-unread-value="true"
+                data-action="click->notification-read#markOnce"
+              <% end %>
+            >
               <div class="notif-item__body">
                 <p class="notif-item__title"><%= n.title %></p>
                 <% if n.body.present? %>
@@ -29,15 +37,12 @@
                 <% end %>
                 <p class="notif-item__time"><%= time_ago_in_words(n.created_at) %> ago</p>
               </div>
-              <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
-                <% path = notification_action_path(n) %>
-                <% if path.present? %>
+              <% path = notification_action_path(n) %>
+              <% if path.present? %>
+                <div class="notif-item__actions">
                   <%= link_to "Open", path, class: "btn btn--outline btn--sm" %>
-                <% end %>
-                <% if n.read_at.nil? %>
-                  <%= button_to "Mark read", read_notification_path(n), method: :patch, class: "btn btn--sm btn--primary" %>
-                <% end %>
-              </div>
+                </div>
+              <% end %>
             </li>
           <% end %>
         </ul>
