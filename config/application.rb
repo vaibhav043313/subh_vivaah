@@ -25,7 +25,8 @@ module SubhVivaah
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    # config.time_zone = "Central Time (US & Canada)"
+    # All times (messages, “last active”, etc.) use this zone. DB still stores UTC.
+    config.time_zone = "Asia/Kolkata"
     # config.eager_load_paths << Rails.root.join("extras")
   end
 end

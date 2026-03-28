@@ -77,6 +77,8 @@ RSpec.describe "Conversations & messages", type: :request do
       expect(response.media_type).to eq("text/vnd.turbo-stream.html")
       expect(response.body).to include("turbo-stream")
       expect(response.body).to include("message-composer-form")
+      # Composer must not repopulate from params on the same POST (empty new message)
+      expect(response.body).not_to include("Hello from RSpec")
     end
 
     it "posts a message with HTML accept (redirect fallback)" do

@@ -45,6 +45,13 @@ RSpec.describe "Site pages & billing UI", type: :request do
       expect(response).to have_http_status(:success)
     end
 
+    it "PATCH /notifications/:id/read with JSON marks read without redirect" do
+      n = user.notifications.create!(kind: "message", title: "Test", body: "Hi")
+      patch read_notification_path(n), headers: { "Accept" => "application/json" }
+      expect(response).to have_http_status(:no_content)
+      expect(n.reload.read_at).to be_present
+    end
+
     it "GET /payments succeeds" do
       get payments_path
       expect(response).to have_http_status(:success)

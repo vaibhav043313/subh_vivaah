@@ -20,12 +20,13 @@ module ConversationsHelper
   def messaging_time_label(time)
     return "—" if time.blank?
 
-    if time.to_date == Time.zone.today
-      time.strftime("%-I:%M %p")
-    elsif time > 7.days.ago
-      time.strftime("%a %-I:%M %p")
+    t = time.in_time_zone
+    if t.to_date == Time.zone.today
+      t.strftime("%-I:%M %p")
+    elsif t > 7.days.ago
+      t.strftime("%a %-I:%M %p")
     else
-      time.strftime("%d %b %Y")
+      t.strftime("%d %b %Y")
     end
   end
 end
