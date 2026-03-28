@@ -52,14 +52,16 @@ group :development, :test do
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
 
-  # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
+  # Ruby style & lint (bin/rubocop); Omakase preset + Rails cops [https://github.com/rails/rubocop-rails-omakase/]
+  gem "rubocop", require: false
   gem "rubocop-rails-omakase", require: false
+  gem "rubocop-rspec", require: false
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
-  gem 'pry'
+  gem "pry"
 end
 
 group :test do
@@ -69,7 +71,7 @@ group :test do
 end
 
 # Authentication
-gem 'devise'
+gem "devise"
 
 # # Background jobs
 # gem 'sidekiq'
@@ -78,7 +80,7 @@ gem 'devise'
 # gem 'redis'
 
 # Serialization
-gem 'active_model_serializers'
+gem "active_model_serializers"
 
 # # Authorization
 # gem 'pundit'

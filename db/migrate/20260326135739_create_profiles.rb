@@ -32,8 +32,8 @@ class CreateProfiles < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :profiles, [:gender, :religion]
-    add_index :profiles, [:city, :state, :country]
+    add_index :profiles, [ :gender, :religion ]
+    add_index :profiles, [ :city, :state, :country ]
     add_index :profiles, :profession
   end
 end

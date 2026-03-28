@@ -32,15 +32,15 @@ end
 
 first_names = %w[Aarav Ananya Vikram Priya Rohan Meera Karan Aditi Neha Arjun]
 city_state = [
-  ["Bangalore", "Karnataka"],
-  ["Mumbai", "Maharashtra"],
-  ["Hyderabad", "Telangana"],
-  ["Chennai", "Tamil Nadu"],
-  ["Pune", "Maharashtra"]
+  [ "Bangalore", "Karnataka" ],
+  [ "Mumbai", "Maharashtra" ],
+  [ "Hyderabad", "Telangana" ],
+  [ "Chennai", "Tamil Nadu" ],
+  [ "Pune", "Maharashtra" ]
 ]
 castes = %w[Brahmin Kshatriya Vaishya]
-educations = ["B.Tech / BE", "MBA / PGDM", "PhD / MPhil"]
-professions = ["Software Engineer", "Doctor", "Business Owner"]
+educations = [ "B.Tech / BE", "MBA / PGDM", "PhD / MPhil" ]
+professions = [ "Software Engineer", "Doctor", "Business Owner" ]
 tongues = %w[Hindi Tamil Telugu]
 
 48.times do |i|

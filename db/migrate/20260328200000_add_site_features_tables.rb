@@ -42,8 +42,8 @@ class AddSiteFeaturesTables < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :notifications, [:user_id, :read_at]
-    add_index :notifications, [:user_id, :created_at]
+    add_index :notifications, [ :user_id, :read_at ]
+    add_index :notifications, [ :user_id, :created_at ]
 
     create_table :payments do |t|
       t.references :user, null: false, foreign_key: true
@@ -68,6 +68,6 @@ class AddSiteFeaturesTables < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :subscriptions, [:user_id, :status]
+    add_index :subscriptions, [ :user_id, :status ]
   end
 end

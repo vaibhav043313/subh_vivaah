@@ -9,7 +9,7 @@ class Conversation < ApplicationRecord
   scope :ordered_for_inbox, -> { order(Arel.sql("last_message_at DESC NULLS LAST"), updated_at: :desc) }
 
   def self.between!(user_a, user_b)
-    lo, hi = [user_a.id, user_b.id].sort
+    lo, hi = [ user_a.id, user_b.id ].sort
     find_or_create_by!(user_lower_id: lo, user_higher_id: hi)
   end
 
