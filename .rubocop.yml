@@ -1,5 +1,24 @@
 # Omakase Ruby styling for Rails
-inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+inherit_gem:
+  rubocop-rails-omakase: rubocop.yml
+
+plugins:
+  - rubocop-rspec
+
+AllCops:
+  # Keep cache inside the project (avoids permission issues in some CI/sandbox setups)
+  CacheRootDirectory: tmp/rubocop_cache
+  NewCops: enable
+
+# Request/feature specs often assert status + body in one example; keep RuboCop useful without churn.
+RSpec/MultipleExpectations:
+  Max: 8
+
+RSpec/ExampleLength:
+  Max: 35
+
+RSpec/LetSetup:
+  Enabled: false
 
 # Overwrite or add rules to create your own house style
 #

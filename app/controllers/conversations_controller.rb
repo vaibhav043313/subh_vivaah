@@ -1,7 +1,7 @@
 class ConversationsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_sidebar_data
-  before_action :set_conversation, only: [:show]
+  before_action :set_conversation, only: [ :show ]
 
   def index
     @conversation = nil

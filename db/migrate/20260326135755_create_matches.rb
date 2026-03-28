@@ -10,7 +10,7 @@ class CreateMatches < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :matches, [:user_id, :matched_user_id], unique: true
+    add_index :matches, [ :user_id, :matched_user_id ], unique: true
     add_index :matches, :score
   end
 end

@@ -29,9 +29,9 @@ Rails.application.routes.draw do
   get "feedback", to: "pages#feedback", as: :feedback
   post "feedback", to: "pages#create_feedback", as: :submit_feedback
 
-  resources :blog_posts, only: [:index, :show], path: "blog", param: :slug
+  resources :blog_posts, only: [ :index, :show ], path: "blog", param: :slug
 
-  resources :notifications, only: [:index] do
+  resources :notifications, only: [ :index ] do
     member do
       patch :read
     end
@@ -40,12 +40,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :payments, only: [:index]
-  resource :subscription, only: [:show], controller: "subscriptions"
+  resources :payments, only: [ :index ]
+  resource :subscription, only: [ :show ], controller: "subscriptions"
 
-  resources :profiles, only: [:index, :create, :show]
+  resources :profiles, only: [ :index, :create, :show ]
 
-  resources :conversations, only: [:index, :show, :create] do
-    resources :messages, only: [:create]
+  resources :conversations, only: [ :index, :show, :create ] do
+    resources :messages, only: [ :create ]
   end
 end

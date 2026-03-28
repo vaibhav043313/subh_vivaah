@@ -81,15 +81,15 @@ class BrowseProfilesQuery
     end
 
     scope = case @params[:sort]
-            when "newest"
+    when "newest"
               scope.order(created_at: :desc)
-            when "age_asc"
+    when "age_asc"
               scope.order(date_of_birth: :desc)
-            when "age_desc"
+    when "age_desc"
               scope.order(date_of_birth: :asc)
-            else
+    else
               scope.order(completion_score: :desc, created_at: :desc)
-            end
+    end
 
     scope.preload(:user)
   end
@@ -100,10 +100,10 @@ class BrowseProfilesQuery
     rel = relation
     total = rel.count
     records = rel.offset((page - 1) * PER_PAGE).limit(PER_PAGE).to_a
-    [records, total, page]
+    [ records, total, page ]
   end
 
   def self.community_counts
-    Profile.where.not(caste: [nil, ""]).group(:caste).count
+    Profile.where.not(caste: [ nil, "" ]).group(:caste).count
   end
 end

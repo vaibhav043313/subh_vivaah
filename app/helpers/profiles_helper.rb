@@ -15,16 +15,16 @@ module ProfilesHelper
   end
 
   def profile_display_name(profile)
-    [profile.first_name, profile.last_name].compact_blank.join(" ")
+    [ profile.first_name, profile.last_name ].compact_blank.join(" ")
   end
 
   def profile_location_line(profile)
-    parts = [profile.city, profile.state].compact_blank
+    parts = [ profile.city, profile.state ].compact_blank
     parts.any? ? parts.join(", ") : nil
   end
 
   def profile_education_job(profile)
-    parts = [profile.education, profile.profession].compact_blank
+    parts = [ profile.education, profile.profession ].compact_blank
     parts.any? ? parts.join(" • ") : nil
   end
 
@@ -81,8 +81,8 @@ module ProfilesHelper
     if profile.photos.attached?
       profile.photos.map do |photo|
         {
-          full: url_for(photo.variant(resize_to_limit: [880, 880])),
-          thumb: url_for(photo.variant(resize_to_limit: [112, 112]))
+          full: url_for(photo.variant(resize_to_limit: [ 880, 880 ])),
+          thumb: url_for(photo.variant(resize_to_limit: [ 112, 112 ]))
         }
       end
     else
@@ -99,7 +99,7 @@ module ProfilesHelper
 
   def profile_similar_thumb_url(profile)
     if profile.photos.attached?
-      url_for(profile.photos.first.variant(resize_to_limit: [320, 400]))
+      url_for(profile.photos.first.variant(resize_to_limit: [ 320, 400 ]))
     else
       "https://i.pravatar.cc/320?u=#{profile.user_id}"
     end
