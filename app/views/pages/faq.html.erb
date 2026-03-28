@@ -1,0 +1,48 @@
+<% content_for :title, "FAQ & help — Subh Vivaah" %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "site_pages", "data-turbo-track": "reload" %>
+<% end %>
+
+<div class="site-page">
+  <%= render "shared/app_header" %>
+
+  <main class="site-page__main">
+    <div class="container">
+      <%= render "shared/flash_strip" %>
+      <h1 class="site-page__title">Help &amp; FAQ</h1>
+      <p class="site-page__lead">
+        Quick answers about membership, privacy, and using Subh Vivaah.
+      </p>
+      <div class="site-prose card" style="padding: 1.5rem 1.65rem;">
+        <h2>Is registration free?</h2>
+        <p>Yes. You can sign up, create a profile, and explore basic search for free. Paid plans unlock contact details and full messaging as described on <%= link_to "Membership & pricing", pricing_path %>.</p>
+
+        <h2>How do I upgrade?</h2>
+        <p>Open <%= link_to "Membership", pricing_path %> and choose a plan. Checkout integration can be connected when you go live; until then, <%= link_to "contact us", contact_path %> for manual upgrades in demo environments.</p>
+
+        <h2>Who can see my phone number?</h2>
+        <p>On free membership, contact details are not shown to others. On eligible paid plans, visibility follows your settings and the other member’s plan — we never publish your number on public pages.</p>
+
+        <h2>How do messages and notifications work?</h2>
+        <p>
+          When someone messages you or views your profile (with deduplication), you will see alerts under
+          <% if user_signed_in? %>
+            <%= link_to "Notifications", notifications_path %>.
+          <% else %>
+            Notifications (after you sign in).
+          <% end %>
+          Interest alerts may be added in a future update.
+        </p>
+
+        <h2>How do I report a problem?</h2>
+        <p>Use <%= link_to "Feedback & report issue", feedback_path %> or <%= link_to "contact", contact_path %> with details and screenshots if possible.</p>
+
+        <p style="margin-top: 1.5rem;">
+          Still stuck? <%= link_to "Contact support", contact_path %>.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <%= render "shared/site_footer" %>
+</div>

@@ -28,6 +28,7 @@ class ProfilesController < ApplicationController
   def show
     @profile = Profile.includes(:user, photos_attachments: :blob).find(params[:id])
     @similar_profiles = ::SimilarProfilesQuery.new(@profile, current_user).call
+    notify_profile_view_if_viewing_other
 
     respond_to do |format|
       format.html
@@ -36,6 +37,12 @@ class ProfilesController < ApplicationController
   end
 
   private
+
+  def notify_profile_view_if_viewing_other
+    return unless @profile.user_id != current_user.id
+
+    Notification.deliver_profile_view(viewer: current_user, profile: @profile)
+  end
 
   def touch_presence
     current_user.update_column(:last_seen_at, Time.current)

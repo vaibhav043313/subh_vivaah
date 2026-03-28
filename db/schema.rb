@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_28_140000) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_28_200000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,6 +42,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_28_140000) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "blog_posts", force: :cascade do |t|
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.string "excerpt"
+    t.datetime "published_at"
+    t.string "slug", null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_blog_posts_on_slug", unique: true
+  end
+
+  create_table "contact_messages", force: :cascade do |t|
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.string "email", null: false
+    t.string "name", null: false
+    t.string "subject"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "conversations", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "last_message_at"
@@ -52,6 +72,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_28_140000) do
     t.index ["user_higher_id"], name: "index_conversations_on_user_higher_id"
     t.index ["user_lower_id", "user_higher_id"], name: "index_conversations_on_user_lower_id_and_user_higher_id", unique: true
     t.index ["user_lower_id"], name: "index_conversations_on_user_lower_id"
+  end
+
+  create_table "feedback_submissions", force: :cascade do |t|
+    t.text "body", null: false
+    t.string "category", default: "general", null: false
+    t.datetime "created_at", null: false
+    t.string "email"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_feedback_submissions_on_user_id"
   end
 
   create_table "matches", force: :cascade do |t|
@@ -76,6 +106,38 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_28_140000) do
     t.index ["conversation_id", "created_at"], name: "index_messages_on_conversation_id_and_created_at"
     t.index ["conversation_id"], name: "index_messages_on_conversation_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.bigint "actor_id"
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.string "kind", null: false
+    t.bigint "notifiable_id"
+    t.string "notifiable_type"
+    t.datetime "read_at"
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["actor_id"], name: "index_notifications_on_actor_id"
+    t.index ["notifiable_type", "notifiable_id"], name: "index_notifications_on_notifiable"
+    t.index ["user_id", "created_at"], name: "index_notifications_on_user_id_and_created_at"
+    t.index ["user_id", "read_at"], name: "index_notifications_on_user_id_and_read_at"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.integer "amount_cents", null: false
+    t.datetime "created_at", null: false
+    t.string "currency", default: "INR", null: false
+    t.string "description"
+    t.string "external_reference"
+    t.datetime "paid_at"
+    t.string "plan_name"
+    t.string "status", default: "paid", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_payments_on_user_id"
   end
 
   create_table "preferences", force: :cascade do |t|
@@ -122,6 +184,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_28_140000) do
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.date "ends_on"
+    t.string "plan_key", null: false
+    t.date "starts_on"
+    t.string "status", default: "active", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id", "status"], name: "index_subscriptions_on_user_id_and_status"
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "confirmation_sent_at"
     t.string "confirmation_token"
@@ -151,9 +225,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_28_140000) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "conversations", "users", column: "user_higher_id"
   add_foreign_key "conversations", "users", column: "user_lower_id"
+  add_foreign_key "feedback_submissions", "users"
   add_foreign_key "matches", "users"
   add_foreign_key "messages", "conversations"
   add_foreign_key "messages", "users", column: "sender_id"
+  add_foreign_key "notifications", "users"
+  add_foreign_key "notifications", "users", column: "actor_id"
+  add_foreign_key "payments", "users"
   add_foreign_key "preferences", "users"
   add_foreign_key "profiles", "users"
+  add_foreign_key "subscriptions", "users"
 end

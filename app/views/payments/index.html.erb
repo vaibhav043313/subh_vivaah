@@ -1,0 +1,53 @@
+<% content_for :title, "Payment history — Subh Vivaah" %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "site_pages", "data-turbo-track": "reload" %>
+<% end %>
+
+<div class="site-page">
+  <%= render "shared/app_header" %>
+
+  <main class="site-page__main">
+    <div class="container">
+      <%= render "shared/flash_strip" %>
+      <h1 class="site-page__title">Payment history</h1>
+      <p class="site-page__lead">
+        Your completed and pending charges (amounts shown in rupees; stored in paise internally).
+      </p>
+
+      <% if @payments.any? %>
+        <div class="card" style="padding: 0; overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Plan / description</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @payments.each do |p| %>
+                <tr>
+                  <td><%= (p.paid_at || p.created_at).strftime("%-d %b %Y") %></td>
+                  <td><%= [p.plan_name, p.description].compact.join(" — ").presence || "—" %></td>
+                  <td>₹<%= number_with_precision(p.amount_rupees, precision: 2) %> <%= p.currency %></td>
+                  <td><%= p.status %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <p class="site-prose">
+          No payments yet. <%= link_to "View membership plans", pricing_path %> to upgrade when checkout is available.
+        </p>
+      <% end %>
+
+      <p style="margin-top: 1.5rem;">
+        <%= link_to "Subscription details", subscription_path, class: "btn btn--outline btn--sm" %>
+      </p>
+    </div>
+  </main>
+
+  <%= render "shared/site_footer" %>
+</div>

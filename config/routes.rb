@@ -18,6 +18,16 @@ Rails.application.routes.draw do
 
   get "pricing", to: "pricing#show", as: :pricing
 
+  get "about", to: "pages#about", as: :about
+  get "contact", to: "pages#contact", as: :contact
+  post "contact", to: "pages#create_contact", as: :submit_contact
+
+  get "faq", to: "pages#faq", as: :faq
+  get "terms", to: "pages#terms", as: :terms
+  get "privacy", to: "pages#privacy", as: :privacy
+
+  get "feedback", to: "pages#feedback", as: :feedback
+  post "feedback", to: "pages#create_feedback", as: :submit_feedback
 
   resources :blog_posts, only: [:index, :show], path: "blog", param: :slug
 
@@ -29,6 +39,10 @@ Rails.application.routes.draw do
       patch :mark_all_read
     end
   end
+
+  resources :payments, only: [:index]
+  resource :subscription, only: [:show], controller: "subscriptions"
+
   resources :profiles, only: [:index, :create, :show]
 
   resources :conversations, only: [:index, :show, :create] do

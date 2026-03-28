@@ -1,0 +1,40 @@
+<% content_for :title, "Privacy policy — Subh Vivaah" %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "site_pages", "data-turbo-track": "reload" %>
+<% end %>
+
+<div class="site-page">
+  <%= render "shared/app_header" %>
+
+  <main class="site-page__main">
+    <div class="container">
+      <%= render "shared/flash_strip" %>
+      <h1 class="site-page__title">Privacy policy</h1>
+      <p class="site-page__lead">
+        How we handle your information on Subh Vivaah. This is a placeholder summary — replace with full legal policy before launch.
+      </p>
+      <div class="site-prose card" style="padding: 1.5rem 1.65rem;">
+        <h2>What we collect</h2>
+        <p>We collect information you provide (profile, messages to support, payment-related data when checkout is enabled) and technical data needed to run the site (logs, device/browser type) in line with common web practice.</p>
+
+        <h2>How we use it</h2>
+        <p>We use your data to operate matchmaking features, improve safety, send service-related notifications, and comply with law. Marketing messages, if any, will follow applicable consent rules.</p>
+
+        <h2>Sharing</h2>
+        <p>We do not sell your personal data. We may share information with service providers who help us host or process payments, under confidentiality obligations, or when required by law.</p>
+
+        <h2>Your choices</h2>
+        <p>You can update profile and account settings when signed in. You may <%= link_to "contact us", contact_path %> to ask about access, correction, or deletion where applicable.</p>
+
+        <h2>Security</h2>
+        <p>We use reasonable technical and organisational measures to protect data. No online service can guarantee perfect security.</p>
+
+        <p>
+          Questions? <%= link_to "Contact us", contact_path %> · <%= link_to "Terms", terms_path %>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <%= render "shared/site_footer" %>
+</div>

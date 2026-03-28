@@ -81,4 +81,57 @@ tongues = %w[Hindi Tamil Telugu]
   )
 end
 
-puts "Seeded demo user priya@example.com / password123 and sample profiles."
+# Blog articles (idempotent by slug)
+[
+  {
+    title: "First meeting tips: respect, boundaries, and family",
+    slug: "first-meeting-tips",
+    excerpt: "How to plan a calm first meeting when both families are involved.",
+    body: "Start in a neutral place if possible, keep the first meeting focused on getting to know values and expectations rather than rushing decisions.\n\nBe punctual, dress appropriately, and listen as much as you speak. If something feels off, it is fine to pause and continue the conversation later with people you trust.",
+    published_at: 2.weeks.ago
+  },
+  {
+    title: "Building an honest matrimony profile",
+    slug: "honest-matrimony-profile",
+    excerpt: "Why clarity beats exaggeration — and what to include in your bio.",
+    body: "Write about your lifestyle, what you are looking for in a partner, and how you see family and career fitting together. Use recent photos and avoid hiding important facts; trust builds from the first conversation.\n\nUpdate your profile as life changes so matches see the real you.",
+    published_at: 1.week.ago
+  },
+  {
+    title: "Safety online: red flags and healthy pace",
+    slug: "safety-online-matrimony",
+    excerpt: "Protect your privacy until you are comfortable — and when to escalate concerns.",
+    body: "Never share passwords, OTPs, or urgent money transfers with someone you only know from the platform. Keep early chats on the app, meet in public when you advance, and tell a friend or family member your plans.\n\nReport suspicious behaviour through our feedback form so we can review.",
+    published_at: 3.days.ago
+  }
+].each do |attrs|
+  BlogPost.find_or_initialize_by(slug: attrs[:slug]).tap do |post|
+    post.assign_attributes(attrs)
+    post.save!
+  end
+end
+
+# Demo payments & subscription for Priya (optional display on account pages)
+if demo.persisted?
+  unless demo.payments.exists?(external_reference: "seed-demo-gold")
+    demo.payments.create!(
+      amount_cents: 149_900,
+      currency: "INR",
+      plan_name: "Gold — 6 months",
+      status: "paid",
+      description: "Demo seed payment",
+      paid_at: 10.days.ago,
+      external_reference: "seed-demo-gold"
+    )
+  end
+  unless demo.subscriptions.exists?(plan_key: "gold_6m")
+    demo.subscriptions.create!(
+      plan_key: "gold_6m",
+      status: "active",
+      starts_on: 10.days.ago.to_date,
+      ends_on: (10.days.ago + 6.months).to_date
+    )
+  end
+end
+
+puts "Seeded demo user priya@example.com / password123, sample profiles, blog posts, and demo billing for Priya."

@@ -12,6 +12,30 @@
     </aside>
 
     <div class="browse-layout__main">
+      <%= form_with url: profiles_path, method: :get, local: true, class: "browse-search" do %>
+        <% @filter_params.each do |name, value| %>
+          <% next if %w[sort view page q].include?(name.to_s) %>
+          <% if value.is_a?(Array) %>
+            <% value.each do |v| %>
+              <%= hidden_field_tag "#{name}[]", v %>
+            <% end %>
+          <% elsif value.present? || (%w[photo_only online_now verified_only].include?(name.to_s) && value.to_s == "1") %>
+            <%= hidden_field_tag name, value %>
+          <% end %>
+        <% end %>
+        <%= hidden_field_tag :sort, @filter_params[:sort].presence || "recommended" %>
+        <%= hidden_field_tag :view, @view_mode %>
+        <%= hidden_field_tag :page, 1 %>
+        <label class="visually-hidden" for="browse-search-q">Search profiles by name or ID</label>
+        <div class="browse-search__field">
+          <span class="browse-search__icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </span>
+          <input type="search" id="browse-search-q" name="q" value="<%= @filter_params[:q] %>" placeholder="Search by name, ID…" class="browse-search__input" autocomplete="off">
+        </div>
+        <%= submit_tag "Search", class: "btn btn--primary btn--sm browse-search__submit" %>
+      <% end %>
+
       <div class="browse-toolbar">
         <p class="browse-toolbar__summary">
           <% if @total_count.positive? %>
@@ -37,6 +61,12 @@
           <% if ActiveModel::Type::Boolean.new.cast(@filter_params[:photo_only]) %>
             <%= link_to profiles_path(profiles_filters_except(:photo_only)), class: "filter-chip" do %>
               Photo only
+              <span class="filter-chip__x" aria-hidden="true">×</span>
+            <% end %>
+          <% end %>
+          <% if @filter_params[:q].present? %>
+            <%= link_to profiles_path(profiles_filters_except(:q)), class: "filter-chip" do %>
+              Search: <%= truncate(@filter_params[:q].to_s, length: 40) %>
               <span class="filter-chip__x" aria-hidden="true">×</span>
             <% end %>
           <% end %>
