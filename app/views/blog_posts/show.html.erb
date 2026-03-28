@@ -1,0 +1,29 @@
+<% content_for :title, "#{@post.title} — Subh Vivaah" %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "site_pages", "data-turbo-track": "reload" %>
+<% end %>
+
+<div class="site-page">
+  <%= render "shared/app_header" %>
+
+  <main class="site-page__main">
+    <div class="container">
+      <%= render "shared/flash_strip" %>
+      <p class="site-page__lead" style="margin-bottom: 0.5rem;">
+        <%= link_to "← All articles", blog_posts_path %>
+      </p>
+      <p class="blog-card__meta" style="margin: 0 0 0.5rem;">
+        <%= @post.published_at&.strftime("%-d %B %Y") %>
+      </p>
+      <h1 class="site-page__title"><%= @post.title %></h1>
+      <% if @post.excerpt.present? %>
+        <p class="site-page__lead"><%= @post.excerpt %></p>
+      <% end %>
+      <div class="site-prose card" style="padding: 1.5rem 1.65rem;">
+        <%= simple_format @post.body %>
+      </div>
+    </div>
+  </main>
+
+  <%= render "shared/site_footer" %>
+</div>
