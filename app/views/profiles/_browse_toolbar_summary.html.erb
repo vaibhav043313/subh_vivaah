@@ -1,0 +1,10 @@
+<p id="browse-toolbar-summary" class="browse-toolbar__summary">
+  <% if @total_count.positive? %>
+    Showing <strong>1 – <%= number_with_delimiter(@shown_through) %></strong> of <%= number_with_delimiter(@total_count) %> profiles
+    <% if @page < @total_pages %>
+      <span class="browse-toolbar__more-hint"> · scroll for more</span>
+    <% end %>
+  <% else %>
+    No profiles match your filters
+  <% end %>
+</p>

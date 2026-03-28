@@ -68,4 +68,39 @@ RSpec.describe "Profiles index (listing)", type: :request do
     expect(response).to have_http_status(:success)
     expect(response.body).to include("Other")
   end
+
+  it "returns turbo_stream that appends more profiles" do
+    stub_const("BrowseProfilesQuery::PER_PAGE", 1)
+    sign_in user
+    3.times do |i|
+      u = User.create!(
+        email: "lazy#{i}@example.com",
+        password: "password123",
+        password_confirmation: "password123"
+      )
+      Profile.create!(
+        user: u,
+        first_name: "Lazy#{i}",
+        last_name: "Member",
+        date_of_birth: 27.years.ago.to_date,
+        gender: :female,
+        city: "Pune",
+        state: "Maharashtra",
+        country: "India",
+        religion: "Hindu",
+        verified: true,
+        has_photo: true
+      )
+    end
+
+    get profiles_path, params: { page: 2, format: :turbo_stream }
+    expect(response).to have_http_status(:success)
+    expect(response.media_type).to eq(Mime[:turbo_stream].to_s)
+    expect(response.body).to include("turbo-stream")
+    expect(response.body).to include('action="append"')
+    expect(response.body).to include("browse-results")
+    expect(response.body).to include('action="replace"')
+    expect(response.body).to include("browse-toolbar-summary")
+    expect(response.body).to include("browse-load-more-root")
+  end
 end

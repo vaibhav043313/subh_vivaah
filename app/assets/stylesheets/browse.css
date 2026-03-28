@@ -257,6 +257,36 @@
   flex: 1 1 200px;
 }
 
+.browse-toolbar__more-hint {
+  font-weight: 400;
+  color: var(--color-muted);
+}
+
+/* Infinite scroll / lazy load */
+.browse-lazy-load {
+  margin-top: 0.5rem;
+}
+
+.browse-lazy-load__sentinel {
+  height: 2px;
+  width: 100%;
+  pointer-events: none;
+}
+
+.browse-lazy-load__status {
+  margin: 0.75rem 0 0;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+  text-align: center;
+}
+
+.browse-lazy-load--end {
+  margin: 1.25rem 0 0;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+  text-align: center;
+}
+
 .browse-toolbar__chips {
   display: flex;
   flex-wrap: wrap;

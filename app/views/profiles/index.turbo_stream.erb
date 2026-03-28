@@ -1,0 +1,19 @@
+<%= turbo_stream.append "browse-results" do %>
+  <% @profiles.each do |profile| %>
+    <%= render "profile_card", profile: profile %>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.replace "browse-toolbar-summary" do %>
+  <%= render "profiles/browse_toolbar_summary" %>
+<% end %>
+
+<%= turbo_stream.replace "browse-load-more-root" do %>
+  <% if @page < @total_pages %>
+    <%= render "profiles/load_more_sentinel" %>
+  <% else %>
+    <p id="browse-load-more-root" class="browse-lazy-load browse-lazy-load--end" role="status">
+      You've seen all <%= number_with_delimiter(@total_count) %> <%= "profile".pluralize(@total_count) %> for these filters.
+    </p>
+  <% end %>
+<% end %>

@@ -1,0 +1,9 @@
+<div
+  id="browse-load-more-root"
+  class="browse-lazy-load"
+  data-controller="browse-lazy-load"
+  data-browse-lazy-load-url-value="<%= profiles_path(@filter_params.merge(page: @page + 1, format: :turbo_stream)) %>"
+>
+  <div class="browse-lazy-load__sentinel" data-browse-lazy-load-target="sentinel" aria-hidden="true"></div>
+  <p class="browse-lazy-load__status visually-hidden" data-browse-lazy-load-target="status" aria-live="polite"></p>
+</div>

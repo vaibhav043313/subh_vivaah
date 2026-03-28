@@ -3,11 +3,6 @@ class ProfilesController < ApplicationController
   before_action :touch_presence, only: [:index]
 
   def index
-    if request.format.turbo_stream?
-      redirect_to profiles_path(request.query_parameters.except("controller", "action", "commit"))
-      return
-    end
-
     @filter_params = permitted_filter_params
     query = ::BrowseProfilesQuery.new(params: @filter_params, current_user: current_user)
     @profiles, @total_count, @page = query.paginated(page: params[:page])
@@ -15,8 +10,12 @@ class ProfilesController < ApplicationController
     @total_pages = [(@total_count.to_f / per).ceil, 1].max
     @community_counts = ::BrowseProfilesQuery.community_counts
     @view_mode = %w[grid list].include?(params[:view]) ? params[:view] : "grid"
-    @first_index = @total_count.zero? ? 0 : ((@page - 1) * per) + 1
-    @last_index = [@page * per, @total_count].min
+    @shown_through = @total_count.zero? ? 0 : [@page * per, @total_count].min
+
+    respond_to do |format|
+      format.html
+      format.turbo_stream
+    end
   end
 
   def create
