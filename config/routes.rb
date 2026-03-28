@@ -18,6 +18,17 @@ Rails.application.routes.draw do
 
   get "pricing", to: "pricing#show", as: :pricing
 
+
+  resources :blog_posts, only: [:index, :show], path: "blog", param: :slug
+
+  resources :notifications, only: [:index] do
+    member do
+      patch :read
+    end
+    collection do
+      patch :mark_all_read
+    end
+  end
   resources :profiles, only: [:index, :create, :show]
 
   resources :conversations, only: [:index, :show, :create] do

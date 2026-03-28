@@ -1,0 +1,51 @@
+<% content_for :title, "Notifications — Subh Vivaah" %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "site_pages", "data-turbo-track": "reload" %>
+<% end %>
+
+<div class="site-page">
+  <%= render "shared/app_header" %>
+
+  <main class="site-page__main">
+    <div class="container">
+      <%= render "shared/flash_strip" %>
+      <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 1rem;">
+        <h1 class="site-page__title" style="margin: 0;">Notifications</h1>
+        <% unread = current_user.notifications.unread.count %>
+        <% if unread.positive? %>
+          <%= button_to "Mark all read", mark_all_read_notifications_path, method: :patch, class: "btn btn--outline btn--sm", form: { data: { turbo: true } } %>
+        <% end %>
+      </div>
+      <p class="site-page__lead">Profile visits, new messages, and other alerts appear here.</p>
+
+      <% if @notifications.any? %>
+        <ul class="notif-list card" style="padding: 0 1.25rem;">
+          <% @notifications.each do |n| %>
+            <li class="notif-item<%= ' notif-item--unread' if n.read_at.nil? %>">
+              <div class="notif-item__body">
+                <p class="notif-item__title"><%= n.title %></p>
+                <% if n.body.present? %>
+                  <p class="notif-item__text"><%= n.body %></p>
+                <% end %>
+                <p class="notif-item__time"><%= time_ago_in_words(n.created_at) %> ago</p>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
+                <% path = notification_action_path(n) %>
+                <% if path.present? %>
+                  <%= link_to "Open", path, class: "btn btn--outline btn--sm" %>
+                <% end %>
+                <% if n.read_at.nil? %>
+                  <%= button_to "Mark read", read_notification_path(n), method: :patch, class: "btn btn--sm btn--primary" %>
+                <% end %>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="site-prose">You have no notifications yet. When someone messages you or views your profile, you will see it here.</p>
+      <% end %>
+    </div>
+  </main>
+
+  <%= render "shared/site_footer" %>
+</div>

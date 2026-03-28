@@ -8,6 +8,7 @@ class Message < ApplicationRecord
 
   after_create_commit :bump_conversation
   after_create_commit :broadcast_to_subscribers
+  after_create_commit :deliver_in_app_notification
 
   scope :for_display, -> { order(created_at: :asc) }
 
@@ -22,6 +23,10 @@ class Message < ApplicationRecord
       last_message_at: created_at,
       last_message_body: body.truncate(240)
     )
+  end
+
+  def deliver_in_app_notification
+    Notification.deliver_message_received(self)
   end
 
   def broadcast_to_subscribers
