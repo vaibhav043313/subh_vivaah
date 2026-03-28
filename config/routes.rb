@@ -16,6 +16,8 @@ Rails.application.routes.draw do
 
   root "home#index"
 
+  get "pricing", to: "pricing#show", as: :pricing
+
   resources :profiles, only: [:index, :create, :show]
 
   resources :conversations, only: [:index, :show, :create] do

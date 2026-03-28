@@ -22,7 +22,7 @@
       <%= link_to "Search", user_signed_in? ? profiles_path : "#quick-search", class: "site-nav__link" %>
       <%= link_to "Browse", user_signed_in? ? profiles_path : "#featured-profiles", class: "site-nav__link" %>
       <%= link_to "How it Works", "#how-verified", class: "site-nav__link" %>
-      <%= link_to "Pricing", "#pricing", class: "site-nav__link" %>
+      <%= link_to "Pricing", pricing_path, class: "site-nav__link #{'is-active' if controller_name == 'pricing'}" %>
     </nav>
 
     <div class="site-header__actions">

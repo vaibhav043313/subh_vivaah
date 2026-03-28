@@ -1,0 +1,169 @@
+<% content_for :title, "Membership & pricing — Subh Vivaah" %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "pricing_page", "data-turbo-track": "reload" %>
+<% end %>
+
+<div class="plans-page">
+  <%= render "shared/site_header" %>
+
+  <main class="plans-main">
+    <header class="plans-hero">
+      <div class="container">
+        <h1 class="plans-hero__title">Membership plans</h1>
+        <p class="plans-hero__lead">
+          Join Subh Vivaah for free, explore profiles, and upgrade when you are ready to unlock contact details, unlimited messaging, and premium visibility.
+        </p>
+        <div class="plans-hero__actions">
+          <% unless user_signed_in? %>
+            <%= link_to "Create free account", new_user_registration_path, class: "btn btn--primary" %>
+            <%= link_to "Sign in", new_user_session_path, class: "btn btn--outline" %>
+          <% else %>
+            <%= link_to "Browse profiles", profiles_path, class: "btn btn--primary" %>
+            <%= link_to "Account settings", edit_user_registration_path, class: "btn btn--outline" %>
+          <% end %>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="plans-rule" id="how-it-works">
+        <p class="plans-rule__title">Simple rule</p>
+        <p class="plans-rule__text">
+          <strong>Join free</strong> — registration, profile creation, photo upload, and basic search are always free.
+          <strong>Contact details</strong> (mobile number and direct reach) are available only on a <strong>paid plan</strong>, so members can try the platform safely before upgrading.
+        </p>
+        <p class="plans-rule__hi" lang="hi">
+          पंजीकरण मुफ़्त है — संपर्क विवरण (मोबाइल नंबर आदि) देखने के लिए सशुल्क सदस्यता आवश्यक है।
+        </p>
+      </div>
+
+      <section class="plans-section" id="compare" aria-labelledby="compare-heading">
+        <h2 id="compare-heading" class="plans-section__title">Free vs paid membership</h2>
+        <p class="plans-section__intro">
+          Every serious matrimony journey starts with trust. Free membership lets people experience Subh Vivaah; paid membership unlocks the tools families need when they are ready to connect directly.
+        </p>
+
+        <div class="plans-compare">
+          <article class="plans-compare__card card">
+            <span class="plans-compare__badge plans-compare__badge--free">Free</span>
+            <h3 class="plans-compare__heading">Basic (free) membership</h3>
+            <p class="plans-compare__purpose">Designed so as many genuine members as possible can register and explore.</p>
+            <p class="plans-compare__sub">Includes</p>
+            <ul class="plans-compare__list">
+              <li>Free registration and profile creation</li>
+              <li>Fill basic profile details</li>
+              <li>Profile photo upload</li>
+              <li>Basic / limited profile search (e.g. bride / groom search)</li>
+              <li>Browse other profiles (with limits where noted)</li>
+              <li>Send interests — <strong>limited per day</strong> (e.g. up to 5 per day; exact limit may be adjusted)</li>
+            </ul>
+            <p class="plans-compare__sub">Limitations</p>
+            <ul class="plans-compare__list plans-compare__list--limits">
+              <li>Mobile number and direct contact details are <strong>not</strong> shown</li>
+              <li>Messaging is <strong>not</strong> unlimited on free</li>
+              <li>Daily interest cap applies</li>
+              <li>Some profiles or sections may stay locked until you upgrade</li>
+            </ul>
+          </article>
+
+          <article class="plans-compare__card card">
+            <span class="plans-compare__badge plans-compare__badge--paid">Paid</span>
+            <h3 class="plans-compare__heading">Premium (paid) membership</h3>
+            <p class="plans-compare__purpose">For members who are ready to take the next step and for sustainable platform quality.</p>
+            <p class="plans-compare__sub">Includes</p>
+            <ul class="plans-compare__list">
+              <li>Unlimited profile search and viewing (within fair use)</li>
+              <li>Access to <strong>mobile number / contact details</strong> where the other member allows</li>
+              <li>Direct chat / messaging — <strong>unlimited</strong> (fair use &amp; community guidelines apply)</li>
+              <li><strong>Unlimited</strong> interest expressions</li>
+              <li>Profile highlight / better placement in listings</li>
+              <li><strong>Verified badge</strong> (blue tick) where verification is completed</li>
+              <li>Priority customer support</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="plans-section" id="plans" aria-labelledby="plans-heading">
+        <h2 id="plans-heading" class="plans-section__title">Suggested subscription plans</h2>
+        <p class="plans-section__intro">
+          Example pricing you can start with (adjust anytime). Payment integration can be wired when you launch checkout.
+        </p>
+
+        <div class="plans-tiers">
+          <article class="plans-tier-card card">
+            <p class="plans-tier-card__name">Silver</p>
+            <p class="plans-tier-card__duration">3 months</p>
+            <p class="plans-tier-card__price">₹999</p>
+            <ul class="plans-tier-card__features">
+              <li>Full paid benefits for 3 months</li>
+              <li>Contact access &amp; unlimited messaging</li>
+              <li>Listing boost &amp; verified badge (if eligible)</li>
+            </ul>
+            <div class="plans-tier-card__cta">
+              <%= link_to "Get started", new_user_registration_path, class: "btn btn--outline" %>
+            </div>
+          </article>
+
+          <article class="plans-tier-card card plans-tier-card--featured">
+            <span class="plans-tier-card__ribbon">Popular</span>
+            <p class="plans-tier-card__name">Gold</p>
+            <p class="plans-tier-card__duration">6 months</p>
+            <p class="plans-tier-card__price">₹1,499</p>
+            <ul class="plans-tier-card__features">
+              <li>Best value for active search</li>
+              <li>All premium features for 6 months</li>
+              <li>Priority support</li>
+            </ul>
+            <div class="plans-tier-card__cta">
+              <%= link_to "Get started", new_user_registration_path, class: "btn btn--primary" %>
+            </div>
+          </article>
+
+          <article class="plans-tier-card card">
+            <p class="plans-tier-card__name">Platinum</p>
+            <p class="plans-tier-card__duration">12 months</p>
+            <p class="plans-tier-card__price">₹2,499</p>
+            <ul class="plans-tier-card__features">
+              <li>Longest runway for your journey</li>
+              <li>All premium features for 12 months</li>
+              <li>Priority support</li>
+            </ul>
+            <div class="plans-tier-card__cta">
+              <%= link_to "Get started", new_user_registration_path, class: "btn btn--outline" %>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="plans-section" id="addons" aria-labelledby="addons-heading">
+        <h2 id="addons-heading" class="plans-section__title">Extra paid add-ons</h2>
+        <p class="plans-section__intro">Optional purchases on top of a plan (examples).</p>
+
+        <div class="plans-addons">
+          <article class="plans-addon card">
+            <h3 class="plans-addon__title">Profile verification badge</h3>
+            <p class="plans-addon__price">₹199</p>
+            <p class="plans-addon__text">Helps your profile stand out with a verified tick after you complete verification steps.</p>
+          </article>
+          <article class="plans-addon card">
+            <h3 class="plans-addon__title">Profile boost</h3>
+            <p class="plans-addon__price">₹299 <span style="font-weight:500;font-size:0.875rem;color:var(--color-muted);">/ 7 days</span></p>
+            <p class="plans-addon__text">Increased visibility in search and browse for one week.</p>
+          </article>
+          <article class="plans-addon card">
+            <h3 class="plans-addon__title">SMS notifications</h3>
+            <p class="plans-addon__price">As priced</p>
+            <p class="plans-addon__text">Optional SMS alerts for interests, messages, or reminders (when enabled).</p>
+          </article>
+        </div>
+
+        <p class="plans-footnote">
+          Limits and prices are indicative. Final numbers, taxes, and payment methods will appear at checkout. Harassment, misuse of contact data, or spam is not allowed; accounts may be restricted under our terms.
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <%= render "shared/site_footer" %>
+</div>

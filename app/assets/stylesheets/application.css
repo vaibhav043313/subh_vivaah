@@ -184,6 +184,11 @@ button.btn {
   color: #262626;
 }
 
+.site-nav__link.is-active {
+  color: #0a0a0a;
+  font-weight: 600;
+}
+
 .site-header__actions {
   display: flex;
   align-items: center;

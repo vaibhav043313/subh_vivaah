@@ -180,36 +180,39 @@
           <h2 class="section__title">Become a premium member</h2>
           <p class="premium__text">Unlock priority placement, richer insights, and dedicated support when you are ready to move faster with confidence.</p>
           <div class="premium__ctas">
-            <%= link_to "Explore Plans", "#pricing-cards", class: "btn btn--primary" %>
-            <%= link_to "Compare Benefits", "#pricing-cards", class: "btn btn--outline" %>
+            <%= link_to "View membership plans", pricing_path, class: "btn btn--primary" %>
+            <%= link_to "Free vs paid", pricing_path(anchor: "compare"), class: "btn btn--outline" %>
           </div>
         </div>
         <div id="pricing-cards" class="premium__cards">
           <article class="pricing-card card">
-            <h3 class="pricing-card__tier">Essentials</h3>
-            <p class="pricing-card__price">Free</p>
+            <h3 class="pricing-card__tier">Free</h3>
+            <p class="pricing-card__price">₹0</p>
             <ul class="pricing-card__features">
-              <li>Basic search</li>
-              <li>Limited messages</li>
+              <li>Register, profile &amp; photos</li>
+              <li>Basic search &amp; limited interests</li>
             </ul>
           </article>
           <article class="pricing-card card pricing-card--highlight">
-            <h3 class="pricing-card__tier">Premium</h3>
-            <p class="pricing-card__price">₹999<span class="pricing-card__period">/mo</span></p>
+            <h3 class="pricing-card__tier">Gold · 6 mo</h3>
+            <p class="pricing-card__price">₹1,499</p>
             <ul class="pricing-card__features">
-              <li>Priority access</li>
-              <li>Verified highlight</li>
+              <li>Contact details &amp; unlimited chat</li>
+              <li>Highlight &amp; verified badge</li>
             </ul>
           </article>
           <article class="pricing-card card">
-            <h3 class="pricing-card__tier">Platinum</h3>
-            <p class="pricing-card__price">₹1,999<span class="pricing-card__period">/mo</span></p>
+            <h3 class="pricing-card__tier">Platinum · 12 mo</h3>
+            <p class="pricing-card__price">₹2,499</p>
             <ul class="pricing-card__features">
-              <li>Dedicated support</li>
-              <li>Concierge assistance</li>
+              <li>Longest premium access</li>
+              <li>Priority support</li>
             </ul>
           </article>
         </div>
+        <p class="premium__text" style="margin-top: 1.25rem; margin-bottom: 0;">
+          <%= link_to "Full pricing, add-ons & rules →", pricing_path %>
+        </p>
       </div>
     </section>
   </main>

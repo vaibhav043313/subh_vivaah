@@ -25,7 +25,7 @@
         <%= link_to "Home", root_path, class: "app-header__nav-link #{'is-active' if controller_name == 'home'}" %>
         <%= link_to "Search & Browse", profiles_path, class: "app-header__nav-link #{'is-active' if controller_name == 'profiles' && action_name == 'index'}" %>
         <%= link_to "Messages", conversations_path, class: "app-header__nav-link #{'is-active' if controller_name == 'conversations'}" %>
-        <%= link_to "Membership", root_path(anchor: "pricing"), class: "app-header__nav-link" %>
+        <%= link_to "Membership", pricing_path, class: "app-header__nav-link #{'is-active' if controller_name == 'pricing'}" %>
       </nav>
 
       <%= form_with url: profiles_path, method: :get, local: true, class: "app-header__search", data: { action: "submit->mobile-menu#close" } do %>
