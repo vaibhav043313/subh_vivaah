@@ -3,7 +3,8 @@
 <% age = profile_age_years(peer) %>
 <% match_pct = profile_match_percent(peer, current_user) %>
 
-<main class="messaging-main" aria-label="Messages with <%= profile_display_name(peer) %>">
+<main class="messaging-main" aria-label="Messages with <%= profile_display_name(peer) %>" data-current-user-id="<%= current_user.id %>">
+  <%= turbo_stream_from @conversation %>
   <%= link_to conversations_path(q: params[:q].presence), class: "messaging-back" do %>
     <span aria-hidden="true">←</span> All conversations
   <% end %>
@@ -33,20 +34,9 @@
 
   <div class="messaging-messages" id="conversation-messages">
     <% if @messages.any? %>
-      <% @messages.each do |message| %>
-        <% mine = message.sender_id == current_user.id %>
-        <article class="messaging-bubble messaging-bubble--<%= mine ? "out" : "in" %>">
-          <%= simple_format(message.body, {}, wrapper_tag: "div") %>
-          <div class="messaging-bubble__meta">
-            <%= messaging_time_label(message.created_at) %>
-            <% if mine %>
-              · <%= message.read_at.present? ? "Read" : "Sent" %>
-            <% end %>
-          </div>
-        </article>
-      <% end %>
+      <%= render @messages %>
     <% else %>
-      <p class="messaging-system">No messages yet — send a thoughtful note to start the conversation.</p>
+      <p class="messaging-system" id="conversation-messages-empty">No messages yet — send a thoughtful note to start the conversation.</p>
     <% end %>
   </div>
 
@@ -56,18 +46,6 @@
       <span class="messaging-composer__chip">Ask details</span>
       <span class="messaging-composer__chip">Share interest</span>
     </div>
-    <%= form_with url: conversation_messages_path(@conversation), scope: :message, method: :post, local: true, class: "messaging-composer__form" do |f| %>
-      <%= f.text_area :body, class: "messaging-composer__field", placeholder: "Write a message…", required: true, maxlength: 10_000, aria: { label: "Message" } %>
-      <div class="messaging-composer__row">
-        <%= f.submit "Send", class: "btn btn--primary" %>
-        <p class="messaging-composer__hint">
-          <% if current_user.premium? %>
-            Premium: unlimited messages. Be respectful — safety tools are available in every thread.
-          <% else %>
-            Free members can connect with courtesy. Upgrade for more daily interests and visibility.
-          <% end %>
-        </p>
-      </div>
-    <% end %>
+    <%= render "messages/form", conversation: @conversation %>
   </div>
 </main>

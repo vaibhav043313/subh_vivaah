@@ -1,0 +1,13 @@
+<%= form_with url: conversation_messages_path(conversation), scope: :message, method: :post, id: "message-composer-form", class: "messaging-composer__form" do |f| %>
+  <%= f.text_area :body, class: "messaging-composer__field", placeholder: "Write a message…", required: true, maxlength: 10_000, aria: { label: "Message" } %>
+  <div class="messaging-composer__row">
+    <%= f.submit "Send", class: "btn btn--primary" %>
+    <p class="messaging-composer__hint">
+      <% if current_user.premium? %>
+        Premium: unlimited messages. Be respectful — safety tools are available in every thread.
+      <% else %>
+        Free members can connect with courtesy. Upgrade for more daily interests and visibility.
+      <% end %>
+    </p>
+  </div>
+<% end %>

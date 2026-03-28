@@ -4,7 +4,7 @@
   <%= stylesheet_link_tag "messaging", "data-turbo-track": "reload" %>
 <% end %>
 
-<div class="messaging-page">
+<div class="messaging-page" data-controller="messaging-scroll">
   <%= render "shared/app_header" %>
   <div class="container container--wide app-flash-wrap">
     <%= render "shared/flash_strip" %>

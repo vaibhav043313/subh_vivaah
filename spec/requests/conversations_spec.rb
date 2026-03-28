@@ -65,15 +65,29 @@ RSpec.describe "Conversations & messages", type: :request do
       expect(response).to have_http_status(:redirect)
     end
 
-    it "posts a message in a thread" do
+    it "posts a message in a thread (Turbo Stream, no full page reload)" do
       conv = Conversation.between!(alice, bob)
       expect do
-        post conversation_messages_path(conv), params: { message: { body: "Hello from RSpec" } }
+        post conversation_messages_path(conv),
+          params: { message: { body: "Hello from RSpec" } },
+          headers: { "Accept" => "text/vnd.turbo-stream.html" }
       end.to change(Message, :count).by(1)
+
+      expect(response).to have_http_status(:success)
+      expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+      expect(response.body).to include("turbo-stream")
+      expect(response.body).to include("message-composer-form")
+    end
+
+    it "posts a message with HTML accept (redirect fallback)" do
+      conv = Conversation.between!(alice, bob)
+      post conversation_messages_path(conv),
+        params: { message: { body: "Hello HTML" } },
+        headers: { "Accept" => "text/html" }
 
       expect(response).to redirect_to(conversation_path(conv))
       follow_redirect!
-      expect(response.body).to include("Hello from RSpec")
+      expect(response.body).to include("Hello HTML")
     end
 
     it "rejects messages to a conversation the user is not in" do

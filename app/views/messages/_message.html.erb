@@ -1,0 +1,12 @@
+<article
+  id="<%= dom_id(message) %>"
+  class="messaging-bubble"
+  data-controller="message-bubble"
+  data-message-bubble-sender-id-value="<%= message.sender_id %>"
+  data-message-bubble-read-value="<%= message.read_at.present? %>">
+  <%= simple_format(message.body, {}, wrapper_tag: "div") %>
+  <div class="messaging-bubble__meta">
+    <%= messaging_time_label(message.created_at) %>
+    <span data-message-bubble-target="readLabel"></span>
+  </div>
+</article>

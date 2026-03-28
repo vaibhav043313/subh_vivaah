@@ -5,7 +5,10 @@ class MessagesController < ApplicationController
   def create
     @message = @conversation.messages.build(message_params.merge(sender: current_user))
     if @message.save
-      redirect_to conversation_path(@conversation)
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to conversation_path(@conversation) }
+      end
     else
       redirect_to conversation_path(@conversation), alert: @message.errors.full_messages.to_sentence.presence || "Message could not be sent."
     end
