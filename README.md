@@ -1,28 +1,31 @@
 # 💍 SubhVivaah – Scalable Matrimonial Platform
 
-SubhVivaah is a high-performance matrimonial web application built using Ruby on Rails, designed to scale to **1M+ active users**.
-The system follows a **modular monolith architecture** with an API-first approach, enabling seamless transition to microservices and mobile platforms in the future.
+Subh Vivaah is a matrimonial web application built with **Ruby on Rails 8**, designed to scale to **1M+ active users**.
+The system follows a **modular monolith architecture** with room for an API-first approach later, so you can grow toward microservices and mobile clients without a ground-up rewrite.
 
 ---
 
 ## 🚀 Tech Stack
 
-* **Backend:** Ruby on Rails (latest stable)
+* **Backend:** Ruby on Rails **8.1** (Solid Cache, Solid Queue, Solid Cable)
 * **Database:** PostgreSQL
-* **Frontend:** Rails (Hotwire – Turbo + Stimulus)
-* **Caching:** Redis
-* **Background Jobs:** Sidekiq
-* **Search Engine:** Elasticsearch (planned)
+* **Frontend:** Rails (**Hotwire** – Turbo + Stimulus), ERB, **importmap** (no Node bundler for app JS)
+* **Assets:** **Propshaft**; global styles in `application.css` plus scoped sheets (`browse.css`, `messaging.css`, `auth.css`, etc.). **Tailwind** via the [Play CDN](https://tailwindcss.com/docs/installation/play-cdn) (preflight off so existing CSS stays intact)
+* **Caching / jobs (in Gemfile):** Solid Cache & Solid Queue (not Redis + Sidekiq today)
+* **Search engine:** Elasticsearch (planned; not in Gemfile yet)
 * **Authentication:** Devise
+* **Tests & quality:** RSpec, **RuboCop** (Rails Omakase + RSpec), Brakeman, `bundler-audit`, `importmap audit` (`bin/ci` runs the full pipeline)
+
+*Optional / future stack pieces (commented or not wired):* Redis, Sidekiq, Kaminari, Elasticsearch gems.
 
 ---
 
 ## 🧠 System Architecture
 
-* Modular Monolith (domain-based structure)
-* API-first design for future mobile apps
-* Scalable database design with indexing
-* Background processing for heavy tasks
+* Modular monolith (profiles, matching, messaging, membership, content)
+* Service objects for heavier flows (`Profiles::CreateProfile`, `Matching::GenerateMatches`)
+* Scalable database design with indexing for browse and filters
+* Background-friendly design (Solid Queue for future/heavy tasks)
 
 ---
 
@@ -30,14 +33,15 @@ The system follows a **modular monolith architecture** with an API-first approac
 
 ### 👤 User Authentication
 
-* Secure authentication using Devise
+* Secure authentication using **Devise**
 * Email-based login (extendable to phone/OTP)
+* Header and redirects tuned for **Turbo** where it matters
 
 ### 🧾 Profile Management
 
-* Detailed user profiles
+* Detailed user profiles and preferences
 * Gender, religion, location, profession, bio
-* Profile visibility controls (planned)
+* **Browse** with filters and lazy-loaded listing; **profile show** with similar profiles
 
 ### 🎯 Matching Engine (V1)
 
@@ -46,14 +50,24 @@ The system follows a **modular monolith architecture** with an API-first approac
   * Gender
   * Religion
   * Location
-* Precomputed matches stored in DB
-* Scalable service-based architecture
+* Precomputed matches stored in the DB
+* Service-based generation (`Matching::GenerateMatches`)
 
 ### ❤️ Match Feed
 
-* Displays potential matches
-* Optimized queries using indexing
-* Ready for pagination & infinite scroll
+* Surfaces potential matches from stored `Match` rows
+* Indexed queries for filtering
+* Ready for pagination and richer UX
+
+### 💬 Messaging & alerts
+
+* **Conversations** and **messages** between members
+* **Notifications** (list, mark read, header badge); app time zone **Asia/Kolkata** for messaging labels
+
+### 💳 Membership & content
+
+* **Pricing**, **subscription**, and **payment history** views (checkout can be wired when you go live)
+* **Blog** and static pages: about, FAQ, contact, feedback, terms, privacy
 
 ---
 
@@ -65,11 +79,21 @@ app/
 │   ├── user.rb
 │   ├── profile.rb
 │   ├── preference.rb
-│   └── match.rb
+│   ├── match.rb
+│   ├── conversation.rb
+│   ├── message.rb
+│   ├── notification.rb
+│   └── …
 │
 ├── controllers/
 │   ├── profiles_controller.rb
-│   └── matches_controller.rb
+│   ├── conversations_controller.rb
+│   ├── messages_controller.rb
+│   ├── notifications_controller.rb
+│   ├── blog_posts_controller.rb
+│   ├── pages_controller.rb
+│   ├── pricing_controller.rb
+│   └── …
 │
 ├── services/
 │   ├── profiles/
@@ -79,7 +103,9 @@ app/
 │
 ├── views/
 │   ├── profiles/
-│   └── matches/
+│   ├── conversations/
+│   ├── shared/
+│   └── …
 ```
 
 ---
@@ -90,7 +116,7 @@ app/
 
 ```bash
 git clone <your-repo-url>
-cd subh-vivaah
+cd subh_vivaah
 ```
 
 ---
@@ -106,8 +132,13 @@ bundle install
 ### 3. Setup Database
 
 ```bash
-rails db:create
-rails db:migrate
+bin/rails db:prepare
+```
+
+Or use the full setup script (also clears logs/tmp):
+
+```bash
+bin/setup --skip-server
 ```
 
 ---
@@ -115,10 +146,20 @@ rails db:migrate
 ### 4. Start Server
 
 ```bash
-rails server
+bin/dev
 ```
 
 Visit: http://localhost:3000
+
+---
+
+### Style, security, and tests (optional but recommended)
+
+```bash
+bin/rubocop              # Ruby style
+bin/ci                   # setup + RuboCop + audits + RSpec + test seeds
+bundle exec rspec        # tests only
+```
 
 ---
 
@@ -153,18 +194,18 @@ Matching::GenerateMatches.call(user)
 
 ### ✅ Precomputed Matches
 
-* Avoid heavy queries on every request
-* Enables fast match feed loading
+* Avoid heavy matching queries on every request
+* Enables fast match feed loading as data grows
 
 ### ✅ Service Layer
 
-* Keeps business logic out of controllers/models
-* Easy to scale into microservices later
+* Keeps orchestration out of bloated controllers/models
+* Easier to move work to jobs or APIs later
 
 ### ✅ Indexed Queries
 
-* Improves performance for large datasets
-* Optimized for filtering use cases
+* Improves performance for browse and filter use cases
+* Room to add search (e.g. Elasticsearch) when needed
 
 ---
 
@@ -172,25 +213,19 @@ Matching::GenerateMatches.call(user)
 
 ### Database
 
-* Indexed columns (gender, religion, city)
+* Indexed columns for common filters (gender, religion, city, etc.)
 * Partitioning (planned)
 * Read replicas (future)
 
 ### Caching
 
-* Redis for:
-
-  * Profile caching
-  * Match feed caching
-  * Sessions
+* **Solid Cache** today for Rails-friendly caching
+* Redis-style caching (optional future) for hot keys, sessions, or feed caches if you add Redis
 
 ### Background Jobs
 
-* Sidekiq for:
-
-  * Match generation
-  * Notifications
-  * Image processing
+* **Solid Queue** for async work (match regeneration, notifications, heavy IO)
+* Sidekiq remains a common choice if you standardise on Redis later
 
 ### Search
 
@@ -200,21 +235,20 @@ Matching::GenerateMatches.call(user)
 
 ## 🔐 Security & Privacy
 
-* Strong parameter filtering
+* Strong parameter filtering in controllers
 * Authentication via Devise
-* Profile visibility controls (planned)
-* GDPR-ready architecture (future)
+* Run **Brakeman** and **bundler-audit** (`bin/ci` includes them)
+* Terms/privacy copy in the app is **placeholder** until counsel-approved legal text ships
 
 ---
 
 ## 🚧 Upcoming Features
 
-* Advanced matching algorithm (score-based)
-* Age filtering (DOB-based)
-* Like / Reject system
-* Real-time updates (Turbo Streams)
-* Messaging system
-* Mobile app (React Native)
+* Advanced matching (score-based, age rules)
+* Like / reject (or similar) flows
+* More **Turbo Streams** where real-time UX helps
+* Payment provider integration for production checkout
+* Mobile app or dedicated API clients (domain layer stays in Rails)
 
 ---
 
@@ -222,8 +256,9 @@ Matching::GenerateMatches.call(user)
 
 1. Fork the repo
 2. Create a feature branch
-3. Commit changes
-4. Open a Pull Request
+3. Run `bin/ci` or at least `bin/rubocop` and `bundle exec rspec`
+4. Commit changes
+5. Open a Pull Request
 
 ---
 
