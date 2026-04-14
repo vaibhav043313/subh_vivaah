@@ -1,0 +1,217 @@
+<%# locals: (profile:) %>
+<% return unless profile_editable?(profile) %>
+
+<dialog id="profile-edit-basics" class="profile-modal" data-controller="modal" data-action="click->modal#backdropClose">
+  <div class="profile-modal__inner">
+    <div class="profile-modal__head">
+      <h3 class="profile-modal__title">Name</h3>
+      <button type="button" class="profile-modal__close" aria-label="Close" data-action="click->modal#close">&times;</button>
+    </div>
+    <%= form_with model: profile, url: profile_path(profile), method: :patch, html: { class: "profile-modal__form", data: { turbo: false } } do |f| %>
+      <%= hidden_field_tag :section, "basics" %>
+      <div class="profile-modal__field">
+        <%= f.label :first_name, class: "profile-modal__label" %>
+        <%= f.text_field :first_name, class: "profile-modal__input", autocomplete: "given-name" %>
+      </div>
+      <div class="profile-modal__field">
+        <%= f.label :last_name, class: "profile-modal__label" %>
+        <%= f.text_field :last_name, class: "profile-modal__input", autocomplete: "family-name" %>
+      </div>
+      <div class="profile-modal__actions">
+        <%= f.submit "Save", class: "btn btn--primary" %>
+        <button type="button" class="btn btn--outline" data-action="click->modal#close">Cancel</button>
+      </div>
+    <% end %>
+  </div>
+</dialog>
+
+<dialog id="profile-edit-photos" class="profile-modal" data-controller="modal" data-action="click->modal#backdropClose">
+  <div class="profile-modal__inner">
+    <div class="profile-modal__head">
+      <h3 class="profile-modal__title">Photos</h3>
+      <button type="button" class="profile-modal__close" aria-label="Close" data-action="click->modal#close">&times;</button>
+    </div>
+    <%= form_with model: profile, url: profile_path(profile), method: :patch, html: { class: "profile-modal__form", multipart: true, data: { turbo: false } } do |f| %>
+      <%= hidden_field_tag :section, "photos" %>
+      <div class="profile-modal__field">
+        <span class="profile-modal__label">Your uploads</span>
+        <% if profile.photos.attached? %>
+          <ul class="profile-modal__photo-list">
+            <% profile.photos.attachments.each do |attachment| %>
+              <li class="profile-modal__photo-item">
+                <div class="profile-modal__photo-thumb-wrap">
+                  <%= image_tag attachment.variant(resize_to_limit: [ 160, 160 ]), class: "profile-modal__photo-thumb", alt: "" %>
+                </div>
+                <%= button_to "Delete",
+                    destroy_photo_profile_path(profile, attachment_id: attachment.id),
+                    method: :delete,
+                    class: "btn btn--outline btn--sm profile-modal__photo-delete",
+                    onclick: "return confirm('Remove this photo from your profile?');",
+                    form: { data: { turbo: false } } %>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p class="profile-modal__hint profile-modal__hint--block">No photos uploaded yet. Add some below.</p>
+        <% end %>
+      </div>
+      <div class="profile-modal__field profile-modal__check">
+        <%= f.check_box :has_photo %>
+        <%= f.label :has_photo, "I have profile photos (shown to matches)", class: "profile-modal__label-inline" %>
+      </div>
+      <div class="profile-modal__field">
+        <%= f.label :photos, "Add more photos", class: "profile-modal__label" %>
+        <%= f.file_field :photos, multiple: true, accept: "image/*", class: "profile-modal__input" %>
+        <p class="profile-modal__hint">New files are appended to your gallery. Use Delete on each image to remove it.</p>
+      </div>
+      <div class="profile-modal__actions">
+        <%= f.submit "Save", class: "btn btn--primary" %>
+        <button type="button" class="btn btn--outline" data-action="click->modal#close">Cancel</button>
+      </div>
+    <% end %>
+  </div>
+</dialog>
+
+<dialog id="profile-edit-about" class="profile-modal" data-controller="modal" data-action="click->modal#backdropClose">
+  <div class="profile-modal__inner">
+    <div class="profile-modal__head">
+      <h3 class="profile-modal__title">About me</h3>
+      <button type="button" class="profile-modal__close" aria-label="Close" data-action="click->modal#close">&times;</button>
+    </div>
+    <%= form_with model: profile, url: profile_path(profile), method: :patch, html: { class: "profile-modal__form", data: { turbo: false } } do |f| %>
+      <%= hidden_field_tag :section, "about" %>
+      <div class="profile-modal__field">
+        <%= f.label :bio, class: "profile-modal__label" %>
+        <%= f.text_area :bio, class: "profile-modal__input profile-modal__textarea", rows: 6, placeholder: "Introduce yourself…" %>
+      </div>
+      <div class="profile-modal__actions">
+        <%= f.submit "Save", class: "btn btn--primary" %>
+        <button type="button" class="btn btn--outline" data-action="click->modal#close">Cancel</button>
+      </div>
+    <% end %>
+  </div>
+</dialog>
+
+<dialog id="profile-edit-personal" class="profile-modal" data-controller="modal" data-action="click->modal#backdropClose">
+  <div class="profile-modal__inner">
+    <div class="profile-modal__head">
+      <h3 class="profile-modal__title">Personal details</h3>
+      <button type="button" class="profile-modal__close" aria-label="Close" data-action="click->modal#close">&times;</button>
+    </div>
+    <%= form_with model: profile, url: profile_path(profile), method: :patch, html: { class: "profile-modal__form", data: { turbo: false } } do |f| %>
+      <%= hidden_field_tag :section, "personal" %>
+      <div class="profile-modal__field">
+        <%= f.label :date_of_birth, class: "profile-modal__label" %>
+        <%= f.date_field :date_of_birth, class: "profile-modal__input", max: 18.years.ago.to_date, min: 80.years.ago.to_date %>
+      </div>
+      <div class="profile-modal__field">
+        <%= f.label :gender, class: "profile-modal__label" %>
+        <%= f.select :gender, Profile.genders.keys.map { |k| [ k.to_s.humanize, k ] }, {}, { class: "profile-modal__input" } %>
+      </div>
+      <div class="profile-modal__field">
+        <%= f.label :height_cm, "Height (cm)", class: "profile-modal__label" %>
+        <%= f.number_field :height_cm, class: "profile-modal__input", min: 100, max: 250, step: 1 %>
+      </div>
+      <div class="profile-modal__field">
+        <%= f.label :marital_status, class: "profile-modal__label" %>
+        <%= f.text_field :marital_status, class: "profile-modal__input" %>
+      </div>
+      <div class="profile-modal__field">
+        <%= f.label :religion, class: "profile-modal__label" %>
+        <%= f.text_field :religion, class: "profile-modal__input" %>
+      </div>
+      <div class="profile-modal__field">
+        <%= f.label :caste, "Caste / community", class: "profile-modal__label" %>
+        <%= f.text_field :caste, class: "profile-modal__input" %>
+      </div>
+      <div class="profile-modal__field">
+        <%= f.label :mother_tongue, class: "profile-modal__label" %>
+        <%= f.text_field :mother_tongue, class: "profile-modal__input" %>
+      </div>
+      <div class="profile-modal__actions">
+        <%= f.submit "Save", class: "btn btn--primary" %>
+        <button type="button" class="btn btn--outline" data-action="click->modal#close">Cancel</button>
+      </div>
+    <% end %>
+  </div>
+</dialog>
+
+<dialog id="profile-edit-career" class="profile-modal" data-controller="modal" data-action="click->modal#backdropClose">
+  <div class="profile-modal__inner">
+    <div class="profile-modal__head">
+      <h3 class="profile-modal__title">Education &amp; career</h3>
+      <button type="button" class="profile-modal__close" aria-label="Close" data-action="click->modal#close">&times;</button>
+    </div>
+    <%= form_with model: profile, url: profile_path(profile), method: :patch, html: { class: "profile-modal__form", data: { turbo: false } } do |f| %>
+      <%= hidden_field_tag :section, "career" %>
+      <div class="profile-modal__field">
+        <%= f.label :education, class: "profile-modal__label" %>
+        <%= f.text_field :education, class: "profile-modal__input" %>
+      </div>
+      <div class="profile-modal__field">
+        <%= f.label :profession, "Occupation", class: "profile-modal__label" %>
+        <%= f.text_field :profession, class: "profile-modal__input" %>
+      </div>
+      <div class="profile-modal__field">
+        <%= f.label :income, "Annual income (LPA band lower bound)", class: "profile-modal__label" %>
+        <%= f.number_field :income, class: "profile-modal__input", min: 0, step: 1 %>
+      </div>
+      <div class="profile-modal__actions">
+        <%= f.submit "Save", class: "btn btn--primary" %>
+        <button type="button" class="btn btn--outline" data-action="click->modal#close">Cancel</button>
+      </div>
+    <% end %>
+  </div>
+</dialog>
+
+<dialog id="profile-edit-location" class="profile-modal" data-controller="modal" data-action="click->modal#backdropClose">
+  <div class="profile-modal__inner">
+    <div class="profile-modal__head">
+      <h3 class="profile-modal__title">Location</h3>
+      <button type="button" class="profile-modal__close" aria-label="Close" data-action="click->modal#close">&times;</button>
+    </div>
+    <%= form_with model: profile, url: profile_path(profile), method: :patch, html: { class: "profile-modal__form", data: { turbo: false } } do |f| %>
+      <%= hidden_field_tag :section, "location" %>
+      <div class="profile-modal__field">
+        <%= f.label :city, class: "profile-modal__label" %>
+        <%= f.text_field :city, class: "profile-modal__input", autocomplete: "address-level2" %>
+      </div>
+      <div class="profile-modal__field">
+        <%= f.label :state, "State / region", class: "profile-modal__label" %>
+        <%= f.text_field :state, class: "profile-modal__input", autocomplete: "address-level1" %>
+      </div>
+      <div class="profile-modal__field">
+        <%= f.label :country, class: "profile-modal__label" %>
+        <%= f.text_field :country, class: "profile-modal__input", autocomplete: "country-name" %>
+      </div>
+      <div class="profile-modal__actions">
+        <%= f.submit "Save", class: "btn btn--primary" %>
+        <button type="button" class="btn btn--outline" data-action="click->modal#close">Cancel</button>
+      </div>
+    <% end %>
+  </div>
+</dialog>
+
+<dialog id="profile-edit-visibility" class="profile-modal" data-controller="modal" data-action="click->modal#backdropClose">
+  <div class="profile-modal__inner">
+    <div class="profile-modal__head">
+      <h3 class="profile-modal__title">Visibility</h3>
+      <button type="button" class="profile-modal__close" aria-label="Close" data-action="click->modal#close">&times;</button>
+    </div>
+    <%= form_with model: profile, url: profile_path(profile), method: :patch, html: { class: "profile-modal__form", data: { turbo: false } } do |f| %>
+      <%= hidden_field_tag :section, "visibility" %>
+      <div class="profile-modal__field">
+        <%= f.label :visibility, "Who can see your profile", class: "profile-modal__label" %>
+        <%= f.select :visibility,
+                     Profile.visibilities.keys.map { |k| [ k.to_s.humanize, k ] },
+                     {},
+                     { class: "profile-modal__input" } %>
+      </div>
+      <p class="profile-modal__hint">Verification and completion are updated automatically when you save other sections.</p>
+      <div class="profile-modal__actions">
+        <%= f.submit "Save", class: "btn btn--primary" %>
+        <button type="button" class="btn btn--outline" data-action="click->modal#close">Cancel</button>
+      </div>
+    <% end %>
+  </div>
+</dialog>

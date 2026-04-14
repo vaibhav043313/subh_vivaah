@@ -1,0 +1,25 @@
+<% content_for :title, "#{@blog_post.title} — Admin" %>
+
+<div class="admin-main__head">
+  <h1 class="admin-main__title"><%= @blog_post.title %></h1>
+  <div class="admin-actions">
+    <%= link_to "Edit", edit_admin_blog_post_path(@blog_post), class: "btn btn--primary btn--sm" %>
+    <%= link_to "Live", blog_post_path(@blog_post.slug), class: "btn btn--outline btn--sm", target: "_blank", rel: "noopener" %>
+    <%= link_to "← Blog", admin_blog_posts_path, class: "btn btn--outline btn--sm" %>
+  </div>
+</div>
+
+<dl class="admin-dl">
+  <dt>Slug</dt><dd><code><%= @blog_post.slug %></code></dd>
+  <dt>Published at</dt><dd><%= @blog_post.published_at&.strftime("%d %b %Y %H:%M") || "Draft (no date)" %></dd>
+</dl>
+
+<% if @blog_post.excerpt.present? %>
+  <p style="font-size: 0.9375rem; color: #52525b; margin: 1rem 0;"><em><%= @blog_post.excerpt %></em></p>
+<% end %>
+
+<div class="admin-prose"><%= @blog_post.body %></div>
+
+<div class="admin-btn-row">
+  <%= button_to "Delete article", admin_blog_post_path(@blog_post), method: :delete, class: "btn btn--outline btn--sm", form: { data: { turbo_confirm: "Delete this article permanently?" } } %>
+</div>

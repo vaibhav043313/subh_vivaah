@@ -1,0 +1,8 @@
+<% content_for :title, "New article — Admin" %>
+
+<div class="admin-main__head">
+  <h1 class="admin-main__title">New blog article</h1>
+  <%= link_to "← Blog", admin_blog_posts_path, class: "btn btn--outline btn--sm" %>
+</div>
+
+<%= render "form", blog_post: @blog_post %>

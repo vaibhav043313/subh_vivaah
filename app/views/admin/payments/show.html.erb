@@ -1,0 +1,17 @@
+<% content_for :title, "Payment ##{@payment.id} — Admin" %>
+
+<div class="admin-main__head">
+  <h1 class="admin-main__title">Payment #<%= @payment.id %></h1>
+  <%= link_to "← Payments", admin_payments_path, class: "btn btn--outline btn--sm" %>
+</div>
+
+<dl class="admin-dl">
+  <dt>User</dt><dd><%= link_to @payment.user.email, admin_user_path(@payment.user) %></dd>
+  <dt>Amount</dt><dd><%= number_to_currency(@payment.amount_rupees, unit: "₹", precision: 2) %> <%= @payment.currency %></dd>
+  <dt>Status</dt><dd><%= @payment.status %></dd>
+  <dt>Plan name</dt><dd><%= @payment.plan_name.presence || "—" %></dd>
+  <dt>Description</dt><dd><%= @payment.description.presence || "—" %></dd>
+  <dt>External reference</dt><dd><%= @payment.external_reference.presence || "—" %></dd>
+  <dt>Paid at</dt><dd><%= @payment.paid_at&.strftime("%d %b %Y %H:%M") || "—" %></dd>
+  <dt>Created</dt><dd><%= @payment.created_at.strftime("%d %b %Y %H:%M") %></dd>
+</dl>

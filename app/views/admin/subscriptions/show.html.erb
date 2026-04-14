@@ -1,0 +1,18 @@
+<% content_for :title, "Subscription ##{@subscription.id} — Admin" %>
+
+<div class="admin-main__head">
+  <h1 class="admin-main__title">Subscription #<%= @subscription.id %></h1>
+  <div class="admin-actions">
+    <%= link_to "Edit", edit_admin_subscription_path(@subscription), class: "btn btn--primary btn--sm" %>
+    <%= link_to "← List", admin_subscriptions_path, class: "btn btn--outline btn--sm" %>
+  </div>
+</div>
+
+<dl class="admin-dl">
+  <dt>User</dt><dd><%= link_to @subscription.user.email, admin_user_path(@subscription.user) %></dd>
+  <dt>Plan key</dt><dd><code><%= @subscription.plan_key %></code></dd>
+  <dt>Status</dt><dd><%= @subscription.status %></dd>
+  <dt>Starts on</dt><dd><%= @subscription.starts_on&.strftime("%d %b %Y") || "—" %></dd>
+  <dt>Ends on</dt><dd><%= @subscription.ends_on&.strftime("%d %b %Y") || "—" %></dd>
+  <dt>Created</dt><dd><%= @subscription.created_at.strftime("%d %b %Y %H:%M") %></dd>
+</dl>

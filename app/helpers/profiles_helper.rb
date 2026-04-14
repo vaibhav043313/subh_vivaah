@@ -1,4 +1,14 @@
 module ProfilesHelper
+  def profile_editable?(profile)
+    user_signed_in? && current_user.profile&.id == profile.id
+  end
+
+  def profile_visibility_label(profile)
+    return "—" if profile.visibility.blank?
+
+    profile.visibility.to_s.humanize
+  end
+
   def profile_age_years(profile)
     return nil unless profile.date_of_birth
 

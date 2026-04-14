@@ -1,0 +1,38 @@
+<% content_for :title, "Edit subscription — Admin" %>
+
+<div class="admin-main__head">
+  <h1 class="admin-main__title">Edit subscription</h1>
+  <%= link_to "← Back", admin_subscription_path(@subscription), class: "btn btn--outline btn--sm" %>
+</div>
+
+<% if @subscription.errors.any? %>
+  <div class="admin-errors">
+    <ul style="margin: 0; padding-left: 1.1rem;">
+      <% @subscription.errors.full_messages.each do |m| %>
+        <li><%= m %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with model: @subscription, url: admin_subscription_path(@subscription), method: :patch, local: true, class: "admin-form" do |f| %>
+  <div class="admin-form__field">
+    <%= f.label :plan_key %>
+    <%= f.text_field :plan_key %>
+  </div>
+  <div class="admin-form__field">
+    <%= f.label :status %>
+    <%= f.text_field :status %>
+  </div>
+  <div class="admin-form__field">
+    <%= f.label :starts_on %>
+    <%= f.date_field :starts_on %>
+  </div>
+  <div class="admin-form__field">
+    <%= f.label :ends_on %>
+    <%= f.date_field :ends_on %>
+  </div>
+  <div class="admin-btn-row">
+    <%= f.submit "Save changes", class: "btn btn--primary" %>
+  </div>
+<% end %>

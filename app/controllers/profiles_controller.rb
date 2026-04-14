@@ -1,6 +1,9 @@
 class ProfilesController < ApplicationController
+  PROFILE_UPDATE_SECTIONS = %w[basics photos about personal career location visibility].freeze
+
   before_action :authenticate_user!
   before_action :touch_presence, only: [ :index ]
+  before_action :require_owned_profile, only: [ :update, :destroy_photo ]
 
   def index
     @filter_params = permitted_filter_params
@@ -35,7 +38,62 @@ class ProfilesController < ApplicationController
     end
   end
 
+  def destroy_photo
+    attachment = @profile.photos.attachments.find_by(id: params[:attachment_id].to_i)
+    unless attachment
+      redirect_to profile_path(@profile), alert: "Photo not found." and return
+    end
+
+    attachment.purge
+    redirect_to profile_path(@profile), notice: "Photo removed."
+  end
+
+  def update
+    section = params[:section].to_s
+    unless PROFILE_UPDATE_SECTIONS.include?(section)
+      redirect_to(profile_path(@profile), alert: "Invalid section.") and return
+    end
+
+    permitted = profile_params_for_section(section)
+    if @profile.update(permitted)
+      redirect_to profile_path(@profile), notice: "Profile updated."
+    else
+      flash.now[:alert] = @profile.errors.full_messages.to_sentence
+      @similar_profiles = ::SimilarProfilesQuery.new(@profile, current_user).call
+      render :show, status: :unprocessable_entity
+    end
+  end
+
   private
+
+  def require_owned_profile
+    @profile = current_user.profile
+    unless @profile&.id == params[:id].to_i
+      redirect_to(profiles_path, alert: "You can only edit your own profile.") and return
+    end
+  end
+
+  def profile_params_for_section(section)
+    p = params.fetch(:profile, {})
+    case section
+    when "basics"
+      p.permit(:first_name, :last_name)
+    when "photos"
+      p.permit(:has_photo, photos: [])
+    when "about"
+      p.permit(:bio)
+    when "personal"
+      p.permit(:date_of_birth, :gender, :height_cm, :marital_status, :religion, :caste, :mother_tongue)
+    when "career"
+      p.permit(:education, :profession, :income)
+    when "location"
+      p.permit(:city, :state, :country)
+    when "visibility"
+      p.permit(:visibility)
+    else
+      {}
+    end
+  end
 
   def notify_profile_view_if_viewing_other
     return unless @profile.user_id != current_user.id

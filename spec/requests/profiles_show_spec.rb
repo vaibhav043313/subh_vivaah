@@ -96,4 +96,11 @@ RSpec.describe "Profiles show", type: :request do
     expect(response).to have_http_status(:success)
     expect(response.media_type).to eq(Mime[:json].to_s)
   end
+
+  it "shows section edit modals when viewing your own profile" do
+    sign_in shown.user
+    get profile_path(shown)
+    expect(response.body).to include("profile-edit-basics")
+    expect(response.body).to include("Visibility &amp; profile status")
+  end
 end

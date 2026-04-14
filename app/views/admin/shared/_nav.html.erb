@@ -1,0 +1,21 @@
+<aside class="admin-sidebar">
+  <div class="admin-sidebar__brand">
+    <%= link_to admin_root_path do %>
+      Subh Vivaah
+      <small>Admin</small>
+    <% end %>
+  </div>
+  <nav class="admin-nav" aria-label="Admin">
+    <%= link_to "Dashboard", admin_root_path, class: admin_nav_class(:dashboard) %>
+    <%= link_to "Users", admin_users_path, class: admin_nav_class(:users) %>
+    <%= link_to "Profiles", admin_profiles_path, class: admin_nav_class(:profiles) %>
+    <%= link_to "Blog", admin_blog_posts_path, class: admin_nav_class(:blog_posts) %>
+    <%= link_to "Payments", admin_payments_path, class: admin_nav_class(:payments) %>
+    <%= link_to "Subscriptions", admin_subscriptions_path, class: admin_nav_class(:subscriptions) %>
+    <%= link_to "Contact messages", admin_contact_messages_path, class: admin_nav_class(:contact_messages) %>
+    <%= link_to "Feedback", admin_feedback_submissions_path, class: admin_nav_class(:feedback_submissions) %>
+  </nav>
+  <div class="admin-nav" style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #27272a;">
+    <%= link_to "← Back to site", root_path, class: "admin-nav__link" %>
+  </div>
+</aside>

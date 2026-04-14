@@ -4,6 +4,8 @@ Rails.application.routes.draw do
     sessions: "users/sessions",
     passwords: "users/passwords"
   }
+
+  patch "users/account/profile", to: "users/account_profiles#update", as: :user_account_profile
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -43,9 +45,24 @@ Rails.application.routes.draw do
   resources :payments, only: [ :index ]
   resource :subscription, only: [ :show ], controller: "subscriptions"
 
-  resources :profiles, only: [ :index, :create, :show ]
+  resources :profiles, only: [ :index, :create, :show, :update ] do
+    member do
+      delete "photos/:attachment_id", to: "profiles#destroy_photo", as: :destroy_photo
+    end
+  end
 
   resources :conversations, only: [ :index, :show, :create ] do
     resources :messages, only: [ :create ]
+  end
+
+  namespace :admin do
+    root to: "dashboard#show"
+    resources :users, only: [ :index, :show, :edit, :update ]
+    resources :profiles, only: [ :index, :show, :edit, :update ]
+    resources :blog_posts
+    resources :payments, only: [ :index, :show ]
+    resources :subscriptions, only: [ :index, :show, :edit, :update ]
+    resources :contact_messages, only: [ :index, :show ]
+    resources :feedback_submissions, only: [ :index, :show ]
   end
 end

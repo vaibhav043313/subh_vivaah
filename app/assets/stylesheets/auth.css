@@ -51,6 +51,10 @@
   max-width: 480px;
 }
 
+.auth-panel--settings {
+  max-width: 40rem;
+}
+
 .auth-card {
   background: #fff;
   border: 1px solid var(--color-border);
@@ -122,6 +126,12 @@
 .auth-input:focus {
   outline: 2px solid #0a0a0a;
   outline-offset: 1px;
+}
+
+textarea.auth-input.auth-textarea {
+  min-height: 6.5rem;
+  resize: vertical;
+  line-height: 1.45;
 }
 
 select.auth-input {

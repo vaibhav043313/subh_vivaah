@@ -13,8 +13,6 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:sign_up, keys: [
       profile_attributes: %i[first_name last_name date_of_birth gender country]
     ])
-    devise_parameter_sanitizer.permit(:account_update, keys: [
-      profile_attributes: %i[first_name last_name date_of_birth gender]
-    ])
+    devise_parameter_sanitizer.permit(:account_update, keys: [ :phone_number ])
   end
 end

@@ -1,0 +1,32 @@
+<% content_for :title, "Contact messages — Admin" %>
+
+<div class="admin-main__head">
+  <h1 class="admin-main__title">Contact messages</h1>
+</div>
+
+<div class="admin-table-wrap">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>From</th>
+        <th>Email</th>
+        <th>Subject</th>
+        <th>Received</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @messages.each do |m| %>
+        <tr>
+          <td><%= m.name %></td>
+          <td><%= m.email %></td>
+          <td><%= m.subject.presence || "—" %></td>
+          <td><%= m.created_at.strftime("%d %b %Y %H:%M") %></td>
+          <td><%= link_to "Open", admin_contact_message_path(m) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= admin_pagination(page: @page, total_pages: @total_pages) %>
