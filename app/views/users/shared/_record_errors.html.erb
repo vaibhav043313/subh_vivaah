@@ -1,0 +1,10 @@
+<% if record.errors.any? %>
+  <div id="error_explanation_<%= record.model_name.param_key %>" class="auth-errors" data-turbo-cache="false">
+    <h2><%= pluralize(record.errors.count, "issue") %> to fix:</h2>
+    <ul>
+      <% record.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

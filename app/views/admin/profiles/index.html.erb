@@ -1,0 +1,36 @@
+<% content_for :title, "Profiles — Admin" %>
+
+<div class="admin-main__head">
+  <h1 class="admin-main__title">Profiles</h1>
+</div>
+
+<div class="admin-table-wrap">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>User</th>
+        <th>City</th>
+        <th>Verified</th>
+        <th>Updated</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @profiles.each do |p| %>
+        <tr>
+          <td><%= p.id %></td>
+          <td><%= [ p.first_name, p.last_name ].compact_blank.join(" ") %></td>
+          <td><%= p.user&.email %></td>
+          <td><%= p.city.presence || "—" %></td>
+          <td><%= p.verified? ? tag.span("Yes", class: "admin-badge admin-badge--ok") : tag.span("No", class: "admin-badge admin-badge--no") %></td>
+          <td><%= p.updated_at.strftime("%d %b %Y") %></td>
+          <td><%= link_to "View", admin_profile_path(p) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= admin_pagination(page: @page, total_pages: @total_pages) %>

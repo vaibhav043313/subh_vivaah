@@ -1,23 +1,26 @@
 <% content_for :title, "Account settings — Subh Vivaah" %>
+<% @profile ||= current_user.profile || current_user.build_profile(country: "India") %>
 
-<div class="auth-panel auth-panel--wide">
+<div class="auth-panel auth-panel--settings">
   <div class="auth-card">
     <h1 class="auth-card__title">Account settings</h1>
-    <p class="auth-card__lead">Update your sign-in email, password, or basic profile details.</p>
+    <p class="auth-card__lead">Update your sign-in details and your public profile in two separate steps.</p>
 
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "auth-form" }) do |f| %>
-      <%= render "users/shared/error_messages", resource: resource %>
+    <p class="auth-section-label">Account &amp; security</p>
+    <p class="auth-hint auth-field--hint">Email, phone, and password. Your current password is required to apply these changes.</p>
 
-      <p class="auth-section-label">Account</p>
+    <%= form_for(current_user, as: :user, url: user_registration_path, html: { method: :put, class: "auth-form" }) do |f| %>
+      <%= render "users/shared/record_errors", record: current_user if current_user.errors.any? %>
 
       <div class="auth-field">
         <%= f.label :email, class: "auth-label" %>
         <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "auth-input" %>
       </div>
 
-      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-        <p class="auth-hint">Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
-      <% end %>
+      <div class="auth-field">
+        <%= f.label :phone_number, "Phone (optional)", class: "auth-label" %>
+        <%= f.telephone_field :phone_number, autocomplete: "tel", class: "auth-input", placeholder: "+91 …" %>
+      </div>
 
       <div class="auth-field">
         <%= f.label :password, class: "auth-label" do %>
@@ -38,53 +41,138 @@
       <div class="auth-field">
         <%= f.label :current_password, class: "auth-label" do %>
           Current password
-          <span class="auth-hint">(required to confirm changes)</span>
+          <span class="auth-hint">(required to confirm account changes)</span>
         <% end %>
         <%= f.password_field :current_password, autocomplete: "current-password", class: "auth-input" %>
       </div>
 
-      <% profile = resource.profile || resource.build_profile %>
-      <%= f.fields_for :profile, profile do |pf| %>
-        <p class="auth-section-label">Profile basics</p>
-
-        <div class="auth-field">
-          <%= pf.label :first_name, class: "auth-label" %>
-          <%= pf.text_field :first_name, class: "auth-input" %>
-        </div>
-
-        <div class="auth-field">
-          <%= pf.label :last_name, class: "auth-label" %>
-          <%= pf.text_field :last_name, class: "auth-input" %>
-        </div>
-
-        <div class="auth-field">
-          <%= pf.label :date_of_birth, class: "auth-label" %>
-          <%= pf.date_field :date_of_birth, class: "auth-input", max: 18.years.ago.to_date, min: 80.years.ago.to_date %>
-        </div>
-
-        <div class="auth-field">
-          <%= pf.label :gender, class: "auth-label" %>
-          <%= pf.select :gender, Profile.genders.keys.map { |k| [k.to_s.humanize, k] }, {}, { class: "auth-input" } %>
-        </div>
-      <% end %>
-
       <div class="auth-actions">
-        <%= f.submit "Save changes", class: "btn btn--primary" %>
+        <%= f.submit "Save account", class: "btn btn--primary" %>
       </div>
     <% end %>
+  </div>
 
-    <div class="auth-divider">or</div>
+  <div class="auth-card" style="margin-top: 1.25rem;">
+    <p class="auth-section-label" style="margin-top: 0;">Profile</p>
+    <p class="auth-hint auth-field--hint">Details shown to other members (subject to visibility). Add photos to help people recognise you.</p>
 
-    <p class="auth-footer-links" style="margin-top: 0;">
-      <%= link_to "Back to home", root_path %>
-      ·
-      <%= link_to "Browse profiles", profiles_path %>
-    </p>
+    <%= form_for @profile, url: user_account_profile_path, html: { method: :patch, class: "auth-form", multipart: true } do |pf| %>
+      <%= render "users/shared/record_errors", record: @profile if @profile.errors.any? %>
+
+      <div class="auth-field">
+        <%= pf.label :first_name, class: "auth-label" %>
+        <%= pf.text_field :first_name, autocomplete: "given-name", class: "auth-input" %>
+      </div>
+
+      <div class="auth-field">
+        <%= pf.label :last_name, class: "auth-label" %>
+        <%= pf.text_field :last_name, autocomplete: "family-name", class: "auth-input" %>
+      </div>
+
+      <div class="auth-field">
+        <%= pf.label :date_of_birth, class: "auth-label" %>
+        <%= pf.date_field :date_of_birth, class: "auth-input", max: 18.years.ago.to_date, min: 80.years.ago.to_date %>
+      </div>
+
+      <div class="auth-field">
+        <%= pf.label :gender, class: "auth-label" %>
+        <%= pf.select :gender, Profile.genders.keys.map { |k| [ k.to_s.humanize, k ] }, {}, { class: "auth-input" } %>
+      </div>
+
+      <div class="auth-field">
+        <%= pf.label :religion, class: "auth-label" %>
+        <%= pf.text_field :religion, class: "auth-input", autocomplete: "off" %>
+      </div>
+
+      <div class="auth-field">
+        <%= pf.label :caste, "Caste / community (optional)", class: "auth-label" %>
+        <%= pf.text_field :caste, class: "auth-input", autocomplete: "off" %>
+      </div>
+
+      <div class="auth-field">
+        <%= pf.label :mother_tongue, class: "auth-label" %>
+        <%= pf.text_field :mother_tongue, class: "auth-input", autocomplete: "off" %>
+      </div>
+
+      <div class="auth-field">
+        <%= pf.label :marital_status, class: "auth-label" %>
+        <%= pf.text_field :marital_status, class: "auth-input", autocomplete: "off", placeholder: "e.g. Never married" %>
+      </div>
+
+      <div class="auth-field">
+        <%= pf.label :education, class: "auth-label" %>
+        <%= pf.text_field :education, class: "auth-input", autocomplete: "off" %>
+      </div>
+
+      <div class="auth-field">
+        <%= pf.label :profession, class: "auth-label" %>
+        <%= pf.text_field :profession, class: "auth-input", autocomplete: "organization-title" %>
+      </div>
+
+      <div class="auth-field">
+        <%= pf.label :income, "Annual income (optional)", class: "auth-label" %>
+        <%= pf.number_field :income, class: "auth-input", min: 0, step: 1, placeholder: "Amount in your local unit" %>
+      </div>
+
+      <div class="auth-field">
+        <%= pf.label :height_cm, "Height (cm)", class: "auth-label" %>
+        <%= pf.number_field :height_cm, class: "auth-input", min: 100, max: 250, step: 1, placeholder: "e.g. 170" %>
+      </div>
+
+      <div class="auth-field">
+        <%= pf.label :city, class: "auth-label" %>
+        <%= pf.text_field :city, class: "auth-input", autocomplete: "address-level2" %>
+      </div>
+
+      <div class="auth-field">
+        <%= pf.label :state, "State / region", class: "auth-label" %>
+        <%= pf.text_field :state, class: "auth-input", autocomplete: "address-level1" %>
+      </div>
+
+      <div class="auth-field">
+        <%= pf.label :country, class: "auth-label" %>
+        <%= pf.text_field :country, class: "auth-input", autocomplete: "country-name" %>
+      </div>
+
+      <div class="auth-field">
+        <%= pf.label :bio, class: "auth-label" %>
+        <%= pf.text_area :bio, class: "auth-input auth-textarea", rows: 5, placeholder: "A short introduction…" %>
+      </div>
+
+      <div class="auth-field">
+        <%= pf.label :visibility, "Who can see your profile", class: "auth-label" %>
+        <%= pf.select :visibility,
+                      Profile.visibilities.keys.map { |k| [ k.to_s.humanize, k ] },
+                      {},
+                      { class: "auth-input" } %>
+      </div>
+
+      <div class="auth-field auth-check">
+        <%= pf.check_box :has_photo %>
+        <%= pf.label :has_photo, "I have added or will add profile photos", class: "auth-label", style: "margin-bottom: 0; font-weight: 500;" %>
+      </div>
+
+      <div class="auth-field">
+        <%= pf.label :photos, "Add photos", class: "auth-label" %>
+        <%= pf.file_field :photos, multiple: true, accept: "image/*", class: "auth-input" %>
+        <p class="auth-hint">You can select multiple images. New uploads are added to your gallery.</p>
+      </div>
+
+      <div class="auth-actions">
+        <%= pf.submit "Save profile", class: "btn btn--primary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="auth-footer-links" style="margin-top: 1.25rem;">
+    <%= link_to "Back to home", root_path %>
+    ·
+    <%= link_to "Browse profiles", profiles_path %>
   </div>
 
   <div class="auth-card auth-card--danger" style="margin-top: 1.25rem;">
     <h2 class="auth-card__title" style="font-size: 1.125rem;">Cancel account</h2>
     <p class="auth-card__lead">This will permanently remove your account and associated data.</p>
-    <%= button_to "Cancel my account", registration_path(resource_name), method: :delete, class: "btn btn--outline", form: { data: { turbo_confirm: "Are you sure? This cannot be undone." } } %>
+    <%= button_to "Cancel my account", user_registration_path, method: :delete, class: "btn btn--outline", form: { data: { turbo_confirm: "Are you sure? This cannot be undone." } } %>
   </div>
 </div>

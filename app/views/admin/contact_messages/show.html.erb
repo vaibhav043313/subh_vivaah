@@ -1,0 +1,16 @@
+<% content_for :title, "Contact message — Admin" %>
+
+<div class="admin-main__head">
+  <h1 class="admin-main__title">Contact message</h1>
+  <%= link_to "← Inbox", admin_contact_messages_path, class: "btn btn--outline btn--sm" %>
+</div>
+
+<dl class="admin-dl">
+  <dt>Name</dt><dd><%= @contact_message.name %></dd>
+  <dt>Email</dt><dd><%= mail_to @contact_message.email %></dd>
+  <dt>Subject</dt><dd><%= @contact_message.subject.presence || "—" %></dd>
+  <dt>Received</dt><dd><%= @contact_message.created_at.strftime("%d %b %Y %H:%M") %></dd>
+</dl>
+
+<h2 style="font-size: 1rem; margin: 1.5rem 0 0.5rem;">Message</h2>
+<div class="admin-prose"><%= simple_format(@contact_message.body) %></div>

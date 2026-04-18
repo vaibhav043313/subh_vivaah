@@ -1,0 +1,25 @@
+<% content_for :title, "Profile ##{@profile.id} — Admin" %>
+
+<div class="admin-main__head">
+  <h1 class="admin-main__title">Profile: <%= @profile.first_name %> <%= @profile.last_name %></h1>
+  <div class="admin-actions">
+    <%= link_to "Edit", edit_admin_profile_path(@profile), class: "btn btn--primary btn--sm" %>
+    <%= link_to "Public page", profile_path(@profile), class: "btn btn--outline btn--sm", target: "_blank", rel: "noopener" %>
+    <%= link_to "← Profiles", admin_profiles_path, class: "btn btn--outline btn--sm" %>
+  </div>
+</div>
+
+<dl class="admin-dl">
+  <dt>User</dt><dd><%= link_to @profile.user.email, admin_user_path(@profile.user) %></dd>
+  <dt>Verified</dt><dd><%= @profile.verified? ? "Yes" : "No" %></dd>
+  <dt>Visibility</dt><dd><%= @profile.visibility.presence || "—" %></dd>
+  <dt>Location</dt><dd><%= [ @profile.city, @profile.state, @profile.country ].compact_blank.join(", ").presence || "—" %></dd>
+  <dt>Religion</dt><dd><%= @profile.religion.presence || "—" %></dd>
+  <dt>Gender</dt><dd><%= @profile.gender.presence || "—" %></dd>
+  <dt>Photos</dt><dd><%= @profile.photos.attached? ? "#{@profile.photos.count} attached" : "None" %></dd>
+</dl>
+
+<% if @profile.bio.present? %>
+  <h2 style="font-size: 1rem; margin: 1.5rem 0 0.5rem;">Bio</h2>
+  <div class="admin-prose"><%= @profile.bio %></div>
+<% end %>

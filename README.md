@@ -3,6 +3,44 @@
 Subh Vivaah is a matrimonial web application built with **Ruby on Rails 8**, designed to scale to **1M+ active users**.
 The system follows a **modular monolith architecture** with room for an API-first approach later, so you can grow toward microservices and mobile clients without a ground-up rewrite.
 
+**Hindi name (डिजिटल ब्रांडिंग):** **शुभ विवाह** — surfaced in the site header, footer, About page, and sign-in chrome.
+
+---
+
+## 👤 Who manages a member’s profile?
+
+* **The member** owns their account and profile content (name, photos, bio, preferences, visibility). They create and update it through registration, account settings, and (for their own profile) the public profile detail page with modals.
+* **The platform operator** (Subh Vivaah / administrators) hosts the service, may run **verification or moderation** according to published rules, and can suspend accounts or remove content that breaks policy or the law. Operators do **not** post as the member unless the member explicitly asks for help (e.g. support ticket).
+
+This split is also summarised for users under **Privacy → Who manages your profile**.
+
+---
+
+## 🧾 Customer (member) panel — feature checklist
+
+| Feature | Status in this codebase |
+|--------|-------------------------|
+| User registration & login | ✅ Devise (email/password) |
+| Profile creation & editing | ✅ Profiles, account settings, own profile page + modals |
+| Partner preference setup | ⚠️ `Preference` model + matching; dedicated preference UI can be expanded |
+| Advanced search / filters | ✅ Browse profiles with filters & lazy load |
+| Match suggestions | ✅ Precomputed `Match` rows; browse / similar profiles |
+| Send interest | 🔲 UI placeholder on profile show; backend flow TBD |
+| Messaging | ✅ Conversations & messages |
+| Shortlist profiles | 🔲 Not implemented yet |
+| Subscription plans | ✅ Pricing + subscription views |
+| Notifications | ✅ In-app list, mark read, header badge |
+| Privacy controls | ⚠️ Profile visibility enum + settings; finer controls TBD |
+| Operator admin (`/admin`) | ✅ Dashboard, users, profiles, blog, payments, subscriptions, contact & feedback |
+
+---
+
+## 🛡️ Admin panel
+
+* **URL:** `/admin` (redirects to the dashboard). Requires a signed-in user with `users.admin = true`.
+* **First admin:** After `bin/rails db:migrate`, run `bin/rails db:seed` — the demo account `priya@example.com` / `password123` is granted admin. In production, promote a user in the Rails console: `User.find_by!(email: "you@…").update!(admin: true)`.
+* **Included:** dashboard counts; users (flags, phone); profiles (verification, visibility, basic fields); blog CRUD; payments and subscriptions; contact messages and feedback inbox. The last admin cannot be demoted (model validation).
+
 ---
 
 ## 🚀 Tech Stack

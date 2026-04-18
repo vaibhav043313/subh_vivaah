@@ -1,0 +1,17 @@
+<%# locals: (heading_id:, title:, icon:, dialog_id: nil, editable: false) %>
+<div class="profile-show__section-head-wrap">
+  <h2 id="<%= heading_id %>" class="profile-show__section-head">
+    <span class="profile-show__section-icon" aria-hidden="true"><%= icon %></span>
+    <%= title %>
+  </h2>
+  <% if editable && dialog_id.present? %>
+    <button
+      type="button"
+      class="btn btn--outline btn--sm profile-show__section-edit"
+      data-controller="modal-open"
+      data-modal-open-dialog-id-value="<%= dialog_id %>"
+      data-action="click->modal-open#open">
+      Edit
+    </button>
+  <% end %>
+</div>

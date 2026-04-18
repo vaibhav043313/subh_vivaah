@@ -30,6 +30,9 @@ if demo.new_record?
   )
 end
 
+# Demo operator: sign in as priya@example.com and open /admin (requires db:migrate for users.admin).
+demo.update!(admin: true)
+
 first_names = %w[Aarav Ananya Vikram Priya Rohan Meera Karan Aditi Neha Arjun]
 city_state = [
   [ "Bangalore", "Karnataka" ],

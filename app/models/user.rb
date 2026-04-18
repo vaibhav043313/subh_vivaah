@@ -17,7 +17,21 @@ class User < ApplicationRecord
   has_many :conversations_as_higher, class_name: "Conversation", foreign_key: :user_higher_id, dependent: :destroy
   has_many :sent_messages, class_name: "Message", foreign_key: :sender_id, dependent: :destroy
 
+  validate :at_least_one_admin_remains, if: :will_save_change_to_admin?
+
   def conversations
     Conversation.for_user(self)
+  end
+
+  private
+
+  def at_least_one_admin_remains
+    return unless admin == false
+
+    other_admins = User.where(admin: true)
+    other_admins = other_admins.where.not(id: id) if id
+    return if other_admins.exists?
+
+    errors.add(:admin, "cannot be removed — at least one administrator must remain")
   end
 end

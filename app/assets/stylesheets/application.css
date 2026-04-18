@@ -155,6 +155,20 @@ button.btn {
   color: #0a0a0a;
 }
 
+.site-logo__text-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+}
+
+.site-logo__hindi {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  letter-spacing: 0.02em;
+}
+
 .app-header {
   position: sticky;
   top: 0;
@@ -491,7 +505,15 @@ body.mobile-menu-open {
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.15;
-  margin: 0 0 1rem;
+  margin: 0 0 0.5rem;
+}
+
+.hero__hindi {
+  margin: 0 0 0.85rem;
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: 0.02em;
 }
 
 .hero__lead {
@@ -975,12 +997,29 @@ body.mobile-menu-open {
   padding: 3rem 0 2.5rem;
 }
 
+.site-footer__hindi-line {
+  margin: 0.75rem 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--color-text);
+  max-width: 22rem;
+}
+
 .site-footer__about {
   font-size: 0.875rem;
   color: var(--color-muted);
   line-height: 1.65;
   margin: 1rem 0 0;
   max-width: 22rem;
+}
+
+.page-hindi-tagline {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: 0.02em;
 }
 
 .site-footer--footer .site-logo {

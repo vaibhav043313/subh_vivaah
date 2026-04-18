@@ -7,7 +7,10 @@
         <span class="site-logo__icon" aria-hidden="true">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
         </span>
-        <span class="site-logo__text">Subh Vivaah</span>
+        <span class="site-logo__text-stack">
+          <span class="site-logo__text">Subh Vivaah</span>
+          <span class="site-logo__hindi" lang="hi">शुभ विवाह</span>
+        </span>
       <% end %>
     </div>
 
@@ -26,6 +29,9 @@
         <%= link_to "Search & Browse", profiles_path, class: "app-header__nav-link #{'is-active' if controller_name == 'profiles' && action_name == 'index'}" %>
         <% if user_signed_in? %>
           <%= link_to "Messages", conversations_path, class: "app-header__nav-link #{'is-active' if controller_name == 'conversations'}" %>
+          <% if current_user.profile %>
+            <%= link_to "My profile", profile_path(current_user.profile), class: "app-header__nav-link #{'is-active' if controller_name == 'profiles' && action_name == 'show' && params[:id].to_i == current_user.profile.id}" %>
+          <% end %>
         <% end %>
         <%= link_to "Membership", pricing_path, class: "app-header__nav-link #{'is-active' if controller_name == 'pricing'}" %>
         <%= link_to "About", about_path, class: "app-header__nav-link #{'is-active' if controller_name == 'pages' && action_name == 'about'}" %>
@@ -59,6 +65,9 @@
             </span>
           </summary>
           <div class="app-header__dropdown max-h-[min(70vh,440px)] overflow-y-auto">
+            <% if current_user.profile %>
+              <%= link_to "My profile", profile_path(current_user.profile), class: "app-header__dropdown-link" %>
+            <% end %>
             <%= link_to "Notifications", notifications_path, class: "app-header__dropdown-link" %>
             <div class="mt-1.5 border-t border-[var(--color-border)] pt-1.5 first-of-type:mt-0 first-of-type:border-t-0 first-of-type:pt-0">
               <p class="px-2.5 pb-0.5 pt-1.5 text-[11px] font-bold uppercase tracking-wider text-[var(--color-muted)]">Membership</p>
@@ -66,6 +75,11 @@
               <%= link_to "Payment history", payments_path, class: "app-header__dropdown-link" %>
               <%= link_to "Upgrade / pricing", pricing_path, class: "app-header__dropdown-link" %>
             </div>
+            <% if current_user.admin? %>
+              <div class="mt-1.5 border-t border-[var(--color-border)] pt-1.5 first-of-type:mt-0 first-of-type:border-t-0 first-of-type:pt-0">
+                <%= link_to "Admin panel", admin_root_path, class: "app-header__dropdown-link font-semibold text-[var(--color-primary)]" %>
+              </div>
+            <% end %>
             <div class="mt-1.5 border-t border-[var(--color-border)] pt-1.5 first-of-type:mt-0 first-of-type:border-t-0 first-of-type:pt-0">
               <p class="px-2.5 pb-0.5 pt-1.5 text-[11px] font-bold uppercase tracking-wider text-[var(--color-muted)]">Help &amp; legal</p>
               <%= link_to "FAQ", faq_path, class: "app-header__dropdown-link" %>
