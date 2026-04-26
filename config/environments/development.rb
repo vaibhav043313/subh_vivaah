@@ -31,6 +31,10 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
+  # Default in Rails is :vips (libvips). Install with `brew install vips`, or use ImageMagick below.
+  # Production Docker installs libvips — see `config/environments/production.rb` and Dockerfile.
+  config.active_storage.variant_processor = :mini_magick # requires `brew install imagemagick`
+
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
