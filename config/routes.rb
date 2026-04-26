@@ -5,6 +5,8 @@ Rails.application.routes.draw do
     passwords: "users/passwords"
   }
 
+  ActiveAdmin.routes(self)
+
   patch "users/account/profile", to: "users/account_profiles#update", as: :user_account_profile
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -53,16 +55,5 @@ Rails.application.routes.draw do
 
   resources :conversations, only: [ :index, :show, :create ] do
     resources :messages, only: [ :create ]
-  end
-
-  namespace :admin do
-    root to: "dashboard#show"
-    resources :users, only: [ :index, :show, :edit, :update ]
-    resources :profiles, only: [ :index, :show, :edit, :update ]
-    resources :blog_posts
-    resources :payments, only: [ :index, :show ]
-    resources :subscriptions, only: [ :index, :show, :edit, :update ]
-    resources :contact_messages, only: [ :index, :show ]
-    resources :feedback_submissions, only: [ :index, :show ]
   end
 end

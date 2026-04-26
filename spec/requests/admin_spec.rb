@@ -3,13 +3,16 @@
 require "rails_helper"
 
 RSpec.describe "Admin area", type: :request do
+  before { Role.ensure_defaults! }
+
   def create_user(email:, admin: false)
-    User.create!(
+    u = User.create!(
       email: email,
       password: "password123",
-      password_confirmation: "password123",
-      admin: admin
+      password_confirmation: "password123"
     )
+    u.roles << Role.admin if admin
+    u
   end
 
   let(:member) { create_user(email: "member-admin-spec@example.com", admin: false) }

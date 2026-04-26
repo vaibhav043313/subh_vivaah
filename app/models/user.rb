@@ -17,21 +17,49 @@ class User < ApplicationRecord
   has_many :conversations_as_higher, class_name: "Conversation", foreign_key: :user_higher_id, dependent: :destroy
   has_many :sent_messages, class_name: "Message", foreign_key: :sender_id, dependent: :destroy
 
-  validate :at_least_one_admin_remains, if: :will_save_change_to_admin?
+  has_many :user_roles, dependent: :destroy
+  has_many :roles, through: :user_roles
+
+  after_create :assign_default_member_role
+
+  validate :at_least_one_admin_remains
+
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[id email phone_number premium status sign_in_count created_at updated_at]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[roles user_roles]
+  end
 
   def conversations
     Conversation.for_user(self)
   end
 
+  def admin?
+    roles.any?(&:admin?)
+  end
+
   private
 
+  def assign_default_member_role
+    member = Role.find_by(key: Role::MEMBER_KEY)
+    return unless member
+
+    user_roles.find_or_create_by!(role: member)
+  end
+
   def at_least_one_admin_remains
-    return unless admin == false
+    admin_role = Role.find_by(key: Role::ADMIN_KEY)
+    return unless admin_role && persisted?
 
-    other_admins = User.where(admin: true)
-    other_admins = other_admins.where.not(id: id) if id
-    return if other_admins.exists?
+    was_admin = UserRole.where(user_id: id, role_id: admin_role.id).exists?
+    return unless was_admin
+    return if admin?
 
-    errors.add(:admin, "cannot be removed — at least one administrator must remain")
+    others = User.joins(:roles).where(roles: { id: admin_role.id }).where.not(users: { id: id })
+    return if others.exists?
+
+    errors.add(:roles, "cannot remove the last administrator")
   end
 end

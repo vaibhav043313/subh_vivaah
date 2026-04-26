@@ -2,8 +2,9 @@ source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.1.3"
-# The modern asset pipeline for Rails [https://github.com/rails/propshaft]
-gem "propshaft"
+# Sprockets + sassc-rails for Active Admin assets; importmap serves app/javascript.
+gem "sprockets-rails", "~> 3.5"
+gem "sassc-rails", "~> 2.1"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 # Use the Puma web server [https://github.com/puma/puma]
@@ -91,3 +92,5 @@ gem "active_model_serializers"
 # # Search (later)
 # gem 'elasticsearch-model'
 # gem 'elasticsearch-rails'
+
+gem "activeadmin", "~> 3.3"
