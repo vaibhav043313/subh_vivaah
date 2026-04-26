@@ -1,5 +1,7 @@
 # Sample data for development and demos (idempotent where possible).
 
+Role.ensure_defaults!
+
 demo = User.find_or_initialize_by(email: "priya@example.com")
 if demo.new_record?
   demo.password = "password123"
@@ -30,8 +32,9 @@ if demo.new_record?
   )
 end
 
-# Demo operator: sign in as priya@example.com and open /admin (requires db:migrate for users.admin).
-demo.update!(admin: true)
+# Demo operator: sign in as priya@example.com and open /admin (has admin role).
+demo.role_ids = [ Role.member.id, Role.admin.id ]
+demo.save!
 
 first_names = %w[Aarav Ananya Vikram Priya Rohan Meera Karan Aditi Neha Arjun]
 city_state = [

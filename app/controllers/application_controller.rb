@@ -7,6 +7,13 @@ class ApplicationController < ActionController::Base
 
   before_action :configure_permitted_parameters, if: :devise_controller?
 
+  def authenticate_active_admin_user!
+    authenticate_user!
+    return if current_user&.admin?
+
+    redirect_to root_path, alert: "You are not authorized to access the admin area."
+  end
+
   protected
 
   def configure_permitted_parameters

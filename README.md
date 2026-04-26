@@ -37,9 +37,9 @@ This split is also summarised for users under **Privacy → Who manages your pro
 
 ## 🛡️ Admin panel
 
-* **URL:** `/admin` (redirects to the dashboard). Requires a signed-in user with `users.admin = true`.
-* **First admin:** After `bin/rails db:migrate`, run `bin/rails db:seed` — the demo account `priya@example.com` / `password123` is granted admin. In production, promote a user in the Rails console: `User.find_by!(email: "you@…").update!(admin: true)`.
-* **Included:** dashboard counts; users (flags, phone); profiles (verification, visibility, basic fields); blog CRUD; payments and subscriptions; contact messages and feedback inbox. The last admin cannot be demoted (model validation).
+* **URL:** `/admin` (redirects to the dashboard). Requires a signed-in user who has the **`admin`** role (`roles.key`, via `user_roles`). Every new user gets the **`member`** role by default; operators can hold **`member`** and **`admin`** (or other roles you add to the `roles` table).
+* **First admin:** After `bin/rails db:migrate`, run `bin/rails db:seed` — the demo account `priya@example.com` / `password123` is given the admin role. In production: `Role.ensure_defaults!` then `User.find_by!(email: "you@…").roles << Role.admin` (or assign `role_ids` in `/admin`).
+* **Included:** dashboard counts; users (roles, flags, phone); profiles (verification, visibility, basic fields); blog CRUD; payments and subscriptions; contact messages and feedback inbox. The last admin cannot be demoted (model validation).
 
 ---
 

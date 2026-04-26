@@ -1,8 +1,0 @@
-<% content_for :title, "Edit article — Admin" %>
-
-<div class="admin-main__head">
-  <h1 class="admin-main__title">Edit article</h1>
-  <%= link_to "← Article", admin_blog_post_path(@blog_post), class: "btn btn--outline btn--sm" %>
-</div>
-
-<%= render "form", blog_post: @blog_post %>
