@@ -1,14 +1,8 @@
 <footer class="site-footer">
   <div class="site-footer__top container">
     <div class="site-footer__brand">
-      <%= link_to root_path, class: "site-logo site-logo--footer" do %>
-        <span class="site-logo__icon" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-        </span>
-        <span class="site-logo__text-stack">
-          <span class="site-logo__text">Subh Vivaah</span>
-          <span class="site-logo__hindi" lang="hi">शुभ विवाह</span>
-        </span>
+      <%= link_to root_path, class: "site-logo site-logo--footer site-logo--mark-only", "aria-label": "Subh Vivaah — Home" do %>
+        <%= image_tag "logo.png", alt: "", class: "site-logo__mark max-h-[1.5rem]" %>
       <% end %>
       <p class="site-footer__hindi-line" lang="hi">शुभ विवाह — विवाह हेतु एक सम्मानजनक मंच</p>
       <p class="site-footer__about">Thoughtful matchmaking for serious relationships. We combine verification, privacy, and human care so you can search with confidence.</p>
