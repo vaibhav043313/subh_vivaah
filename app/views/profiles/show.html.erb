@@ -6,6 +6,7 @@
 
 <% age = profile_age_years(@profile) %>
 <% gallery = profile_gallery_sources(@profile) %>
+<% editable = profile_editable?(@profile) %>
 
 <div class="profile-show-page">
   <%= render "shared/app_header" %>
@@ -13,6 +14,13 @@
   <main class="profile-show container container--wide">
     <%= link_to profiles_path, class: "profile-show__back" do %>
       <span aria-hidden="true">←</span> Back
+    <% end %>
+
+    <% if notice.present? %>
+      <p class="profile-show__flash profile-show__flash--notice" role="status"><%= notice %></p>
+    <% end %>
+    <% if alert.present? %>
+      <p class="profile-show__flash profile-show__flash--alert" role="alert"><%= alert %></p>
     <% end %>
 
     <section class="profile-show__hero card">
@@ -39,10 +47,38 @@
             <% end %>
           </div>
         <% end %>
+        <% if editable %>
+          <div class="profile-show__gallery-edit">
+            <button
+              type="button"
+              class="btn btn--outline btn--sm"
+              data-controller="modal-open"
+              data-modal-open-dialog-id-value="profile-edit-photos"
+              data-action="click->modal-open#open">
+              Edit photos
+            </button>
+          </div>
+        <% end %>
       </div>
 
       <div class="profile-show__summary">
-        <h1 class="profile-show__name"><%= profile_display_name(@profile) %></h1>
+        <div class="profile-show__name-row">
+          <h1 class="profile-show__name"><%= profile_display_name(@profile) %></h1>
+          <% if editable %>
+            <button
+              type="button"
+              class="btn btn--outline btn--sm profile-show__name-edit"
+              data-controller="modal-open"
+              data-modal-open-dialog-id-value="profile-edit-basics"
+              data-action="click->modal-open#open">
+              Edit name
+            </button>
+          <% end %>
+        </div>
+
+        <% if @profile.verified? %>
+          <p class="profile-show__verified-badge" title="Verified profile">✓ Verified</p>
+        <% end %>
 
         <ul class="profile-show__pills">
           <% if age %>
@@ -79,11 +115,11 @@
         </ul>
 
         <div class="profile-show__actions">
-          <%= link_to "#", class: "btn btn--coral profile-show__btn-interest" do %>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-            Send Interest
-          <% end %>
           <% if @profile.user_id != current_user.id %>
+            <%= link_to "#", class: "btn btn--coral profile-show__btn-interest" do %>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+              Send Interest
+            <% end %>
             <%= button_to conversations_path, method: :post, params: { other_user_id: @profile.user_id }, class: "btn btn--outline profile-show__btn-message", form: { class: "profile-show__action-form" } do %>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
               Message
@@ -98,18 +134,22 @@
     </section>
 
     <section class="profile-show__section card" aria-labelledby="about-heading">
-      <h2 id="about-heading" class="profile-show__section-head">
-        <span class="profile-show__section-icon" aria-hidden="true">👤</span>
-        About me
-      </h2>
+      <%= render "profiles/section_head",
+          heading_id: "about-heading",
+          title: "About me",
+          icon: "👤",
+          dialog_id: "profile-edit-about",
+          editable: editable %>
       <p class="profile-show__about"><%= @profile.bio.presence || "This member has not added an about section yet." %></p>
     </section>
 
     <section class="profile-show__section card" aria-labelledby="personal-heading">
-      <h2 id="personal-heading" class="profile-show__section-head">
-        <span class="profile-show__section-icon" aria-hidden="true">📋</span>
-        Personal details
-      </h2>
+      <%= render "profiles/section_head",
+          heading_id: "personal-heading",
+          title: "Personal details",
+          icon: "📋",
+          dialog_id: "profile-edit-personal",
+          editable: editable %>
       <div class="profile-show__grid">
         <div>
           <span class="profile-show__field-label">Date of birth</span>
@@ -147,10 +187,12 @@
     </section>
 
     <section class="profile-show__section card" aria-labelledby="career-heading">
-      <h2 id="career-heading" class="profile-show__section-head">
-        <span class="profile-show__section-icon" aria-hidden="true">🎓</span>
-        Education &amp; career
-      </h2>
+      <%= render "profiles/section_head",
+          heading_id: "career-heading",
+          title: "Education & career",
+          icon: "🎓",
+          dialog_id: "profile-edit-career",
+          editable: editable %>
       <div class="profile-show__grid">
         <div>
           <span class="profile-show__field-label">Education</span>
@@ -168,10 +210,12 @@
     </section>
 
     <section class="profile-show__section card" aria-labelledby="location-heading">
-      <h2 id="location-heading" class="profile-show__section-head">
-        <span class="profile-show__section-icon" aria-hidden="true">📍</span>
-        Location
-      </h2>
+      <%= render "profiles/section_head",
+          heading_id: "location-heading",
+          title: "Location",
+          icon: "📍",
+          dialog_id: "profile-edit-location",
+          editable: editable %>
       <div class="profile-show__grid">
         <div>
           <span class="profile-show__field-label">City</span>
@@ -184,6 +228,33 @@
         <div>
           <span class="profile-show__field-label">Country</span>
           <span class="profile-show__field-value"><%= profile_detail_value(@profile.country) %></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="profile-show__section card" aria-labelledby="privacy-heading">
+      <%= render "profiles/section_head",
+          heading_id: "privacy-heading",
+          title: "Visibility & profile status",
+          icon: "🔒",
+          dialog_id: "profile-edit-visibility",
+          editable: editable %>
+      <div class="profile-show__grid">
+        <div>
+          <span class="profile-show__field-label">Profile visibility</span>
+          <span class="profile-show__field-value"><%= profile_visibility_label(@profile) %></span>
+        </div>
+        <div>
+          <span class="profile-show__field-label">Photos on profile</span>
+          <span class="profile-show__field-value"><%= @profile.has_photo? ? "Yes" : "No" %></span>
+        </div>
+        <div>
+          <span class="profile-show__field-label">Verification</span>
+          <span class="profile-show__field-value"><%= @profile.verified? ? "Verified" : "Not verified" %></span>
+        </div>
+        <div>
+          <span class="profile-show__field-label">Profile completion</span>
+          <span class="profile-show__field-value"><%= @profile.completion_score.to_i %>%</span>
         </div>
       </div>
     </section>
@@ -201,4 +272,5 @@
   </main>
 
   <%= render "listing_footer" %>
+  <%= render "profiles/edit_modals", profile: @profile %>
 </div>

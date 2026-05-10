@@ -9,6 +9,12 @@ module Users
       respond_with resource
     end
 
+    def edit
+      resource.build_profile(country: "India") unless resource.profile
+      @profile = resource.profile
+      super
+    end
+
     protected
 
     def after_sign_up_path_for(resource)

@@ -118,7 +118,7 @@
 }
 
 .plans-compare__badge--paid {
-  background: #0a0a0a;
+  background: var(--color-primary);
   color: #fff;
 }
 
@@ -176,8 +176,8 @@
 }
 
 .plans-tier-card--featured {
-  border-color: #0a0a0a;
-  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.1);
+  border-color: var(--color-primary);
+  box-shadow: 0 10px 36px rgba(255, 87, 88, 0.18);
 }
 
 .plans-tier-card__ribbon {

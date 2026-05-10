@@ -185,7 +185,7 @@
   padding: 0.1rem 0.35rem;
   font-size: 0.65rem;
   font-weight: 700;
-  background: #ff5a60;
+  background: var(--color-primary);
   color: #fff;
   border-radius: 999px;
   margin-left: 0.35rem;

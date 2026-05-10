@@ -3,6 +3,9 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # sassc-rails sets a Sass CSS compressor for non-dev envs; that breaks plain `.css` (e.g. `min()`).
+  config.assets.css_compressor = nil
+
   # Code is not reloaded between requests.
   config.enable_reloading = false
 
@@ -23,6 +26,9 @@ Rails.application.configure do
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
+
+  # Dockerfile installs libvips; use it for variants (faster than mini_magick).
+  config.active_storage.variant_processor = :vips
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
   # config.assume_ssl = true

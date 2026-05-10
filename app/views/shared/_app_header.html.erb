@@ -23,6 +23,9 @@
         <%= link_to "Search & Browse", profiles_path, class: "app-header__nav-link #{'is-active' if controller_name == 'profiles' && action_name == 'index'}" %>
         <% if user_signed_in? %>
           <%= link_to "Messages", conversations_path, class: "app-header__nav-link #{'is-active' if controller_name == 'conversations'}" %>
+          <% if current_user.profile %>
+            <%= link_to "My profile", profile_path(current_user.profile), class: "app-header__nav-link #{'is-active' if controller_name == 'profiles' && action_name == 'show' && params[:id].to_i == current_user.profile.id}" %>
+          <% end %>
         <% end %>
         <%= link_to "Membership", pricing_path, class: "app-header__nav-link #{'is-active' if controller_name == 'pricing'}" %>
         <%= link_to "About", about_path, class: "app-header__nav-link #{'is-active' if controller_name == 'pages' && action_name == 'about'}" %>
@@ -40,7 +43,7 @@
         <%= link_to notifications_path, class: "app-header__icon-btn relative no-underline", "aria-label": "Notifications" do %>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
           <% if n_unread.positive? %>
-            <span class="absolute -right-1 -top-1 flex min-h-[1.1rem] min-w-[1.1rem] items-center justify-center rounded-full bg-[#ff5a60] px-1 text-[0.65rem] font-bold leading-none text-white"><%= n_unread > 99 ? "99+" : n_unread %></span>
+            <span class="absolute -right-1 -top-1 flex min-h-[1.1rem] min-w-[1.1rem] items-center justify-center rounded-full bg-[var(--color-primary)] px-1 text-[0.65rem] font-bold leading-none text-white"><%= n_unread > 99 ? "99+" : n_unread %></span>
           <% end %>
         <% end %>
 
@@ -56,6 +59,9 @@
             </span>
           </summary>
           <div class="app-header__dropdown max-h-[min(70vh,440px)] overflow-y-auto">
+            <% if current_user.profile %>
+              <%= link_to "My profile", profile_path(current_user.profile), class: "app-header__dropdown-link" %>
+            <% end %>
             <%= link_to "Notifications", notifications_path, class: "app-header__dropdown-link" %>
             <div class="mt-1.5 border-t border-[var(--color-border)] pt-1.5 first-of-type:mt-0 first-of-type:border-t-0 first-of-type:pt-0">
               <p class="px-2.5 pb-0.5 pt-1.5 text-[11px] font-bold uppercase tracking-wider text-[var(--color-muted)]">Membership</p>
@@ -63,6 +69,11 @@
               <%= link_to "Payment history", payments_path, class: "app-header__dropdown-link" %>
               <%= link_to "Upgrade / pricing", pricing_path, class: "app-header__dropdown-link" %>
             </div>
+            <% if current_user.admin? %>
+              <div class="mt-1.5 border-t border-[var(--color-border)] pt-1.5 first-of-type:mt-0 first-of-type:border-t-0 first-of-type:pt-0">
+                <%= link_to "Admin panel", admin_root_path, class: "app-header__dropdown-link font-semibold text-[var(--color-primary)]" %>
+              </div>
+            <% end %>
             <div class="mt-1.5 border-t border-[var(--color-border)] pt-1.5 first-of-type:mt-0 first-of-type:border-t-0 first-of-type:pt-0">
               <p class="px-2.5 pb-0.5 pt-1.5 text-[11px] font-bold uppercase tracking-wider text-[var(--color-muted)]">Help &amp; legal</p>
               <%= link_to "FAQ", faq_path, class: "app-header__dropdown-link" %>

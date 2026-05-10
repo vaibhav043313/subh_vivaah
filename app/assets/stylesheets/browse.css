@@ -1,7 +1,7 @@
-/* Browse / Search — layout, filters, results (coral accent #ff5a60, cyan #06b6d4) */
+/* Browse / Search — layout, filters, results (brand accent --color-primary, cyan #06b6d4) */
 
 :root {
-  --browse-coral: #ff5a60;
+  --browse-coral: var(--color-primary);
   --browse-cyan: #06b6d4;
   --browse-orange: #f97316;
   --browse-green: #22c55e;
