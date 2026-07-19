@@ -41,11 +41,27 @@ class ProfilesController < ApplicationController
   def destroy_photo
     attachment = @profile.photos.attachments.find_by(id: params[:attachment_id].to_i)
     unless attachment
-      redirect_to profile_path(@profile), alert: "Photo not found." and return
+      respond_to do |format|
+        format.html { redirect_to profile_path(@profile), alert: "Photo not found." }
+        format.json { render json: { error: "Photo not found." }, status: :not_found }
+      end
+      return
     end
 
+    attachment_id = attachment.id
     attachment.purge
-    redirect_to profile_path(@profile), notice: "Photo removed."
+
+    respond_to do |format|
+      format.html { redirect_to profile_path(@profile), notice: "Photo removed." }
+      format.json do
+        render json: {
+          message: "Photo removed.",
+          profile_id: @profile.id,
+          attachment_id: attachment_id,
+          remaining_photo_count: @profile.photos.attachments.count
+        }
+      end
+    end
   end
 
   def update
@@ -69,7 +85,10 @@ class ProfilesController < ApplicationController
   def require_owned_profile
     @profile = current_user.profile
     unless @profile&.id == params[:id].to_i
-      redirect_to(profiles_path, alert: "You can only edit your own profile.") and return
+      respond_to do |format|
+        format.html { redirect_to profiles_path, alert: "You can only edit your own profile." }
+        format.json { render json: { error: "You can only edit your own profile." }, status: :forbidden }
+      end
     end
   end
 
