@@ -1,6 +1,14 @@
 require "rails_helper"
 
 RSpec.describe "User registration", type: :request do
+  it "includes theme assets and toggle on the auth layout" do
+    get new_user_registration_path
+
+    expect(response.body).to include("subh-vivaah-theme")
+    expect(response.body).to match(%r{href="/assets/theme(?:-[^"]+)?\.css"})
+    expect(response.body).to include(%(data-controller="theme-toggle"))
+  end
+
   it "creates user and profile with nested attributes and redirects to browse" do
     expect do
       post user_registration_path, params: {
