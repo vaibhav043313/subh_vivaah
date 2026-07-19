@@ -31,30 +31,30 @@
       <h3 class="profile-modal__title">Photos</h3>
       <button type="button" class="profile-modal__close" aria-label="Close" data-action="click->modal#close">&times;</button>
     </div>
+    <div class="profile-modal__field">
+      <span class="profile-modal__label">Your uploads</span>
+      <% if profile.photos.attached? %>
+        <ul class="profile-modal__photo-list">
+          <% profile.photos.attachments.each do |attachment| %>
+            <li class="profile-modal__photo-item">
+              <div class="profile-modal__photo-thumb-wrap">
+                <%= image_tag attachment.variant(resize_to_limit: [ 160, 160 ]), class: "profile-modal__photo-thumb", alt: "" %>
+              </div>
+              <%= button_to "Delete",
+                  destroy_photo_profile_path(profile, attachment_id: attachment.id),
+                  method: :delete,
+                  class: "btn btn--outline btn--sm profile-modal__photo-delete",
+                  onclick: "return confirm('Remove this photo from your profile?');",
+                  form: { data: { turbo: false } } %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="profile-modal__hint profile-modal__hint--block">No photos uploaded yet. Add some below.</p>
+      <% end %>
+    </div>
     <%= form_with model: profile, url: profile_path(profile), method: :patch, html: { class: "profile-modal__form", multipart: true, data: { turbo: false } } do |f| %>
       <%= hidden_field_tag :section, "photos" %>
-      <div class="profile-modal__field">
-        <span class="profile-modal__label">Your uploads</span>
-        <% if profile.photos.attached? %>
-          <ul class="profile-modal__photo-list">
-            <% profile.photos.attachments.each do |attachment| %>
-              <li class="profile-modal__photo-item">
-                <div class="profile-modal__photo-thumb-wrap">
-                  <%= image_tag attachment.variant(resize_to_limit: [ 160, 160 ]), class: "profile-modal__photo-thumb", alt: "" %>
-                </div>
-                <%= button_to "Delete",
-                    destroy_photo_profile_path(profile, attachment_id: attachment.id),
-                    method: :delete,
-                    class: "btn btn--outline btn--sm profile-modal__photo-delete",
-                    onclick: "return confirm('Remove this photo from your profile?');",
-                    form: { data: { turbo: false } } %>
-              </li>
-            <% end %>
-          </ul>
-        <% else %>
-          <p class="profile-modal__hint profile-modal__hint--block">No photos uploaded yet. Add some below.</p>
-        <% end %>
-      </div>
       <div class="profile-modal__field profile-modal__check">
         <%= f.check_box :has_photo %>
         <%= f.label :has_photo, "I have profile photos (shown to matches)", class: "profile-modal__label-inline" %>

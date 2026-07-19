@@ -1,4 +1,6 @@
 require "rails_helper"
+require "stringio"
+require "base64"
 
 RSpec.describe "Profiles show", type: :request do
   let(:viewer) do
@@ -102,5 +104,28 @@ RSpec.describe "Profiles show", type: :request do
     get profile_path(shown)
     expect(response.body).to include("profile-edit-basics")
     expect(response.body).to include("Visibility &amp; profile status")
+  end
+
+  it "renders photo delete forms outside the photo upload form" do
+    tiny_png = Base64.decode64(
+      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmH7wAAAABJRU5ErkJggg=="
+    )
+    shown.photos.attach(
+      io: StringIO.new(tiny_png),
+      filename: "tiny.png",
+      content_type: "image/png"
+    )
+
+    attachment_id = shown.photos.attachments.first.id
+    sign_in shown.user
+    get profile_path(shown)
+
+    dialog = response.body[/<dialog id="profile-edit-photos".*?<\/dialog>/m]
+    delete_action = %(action="#{destroy_photo_profile_path(shown, attachment_id: attachment_id)}")
+    upload_action = %(action="#{profile_path(shown)}")
+
+    expect(dialog).to include(delete_action)
+    expect(dialog).to include(upload_action)
+    expect(dialog.index(delete_action)).to be < dialog.index(upload_action)
   end
 end
