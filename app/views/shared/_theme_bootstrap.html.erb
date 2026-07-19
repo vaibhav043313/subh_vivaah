@@ -1,0 +1,13 @@
+<script>
+  (function () {
+    try {
+      var stored = window.localStorage.getItem("subh-vivaah-theme")
+      var theme = stored === "dark" || stored === "light" ? stored : "light"
+      document.documentElement.dataset.theme = theme
+      document.documentElement.style.colorScheme = theme
+    } catch (_error) {
+      document.documentElement.dataset.theme = "light"
+      document.documentElement.style.colorScheme = "light"
+    }
+  })()
+</script>

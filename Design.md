@@ -9,6 +9,7 @@ Subh Vivaah should feel trustworthy, modern, respectful, and practical. This is 
 ## Current Design System
 
 The main design tokens live in `app/assets/stylesheets/application.css`.
+Dark-mode overrides live in `app/assets/stylesheets/theme.css`, which is loaded after page-specific styles.
 
 ```css
 :root {
@@ -45,6 +46,7 @@ The main design tokens live in `app/assets/stylesheets/application.css`.
 - Borders should use `#e5e5e5` or `#d4d4d4`.
 - Secondary accents already used in browse/profile areas include cyan `#06b6d4`, orange `#f97316`, green `#22c55e`, blue `#3b82f6`, and semantic success/error colors.
 - Avoid turning the app into a one-color theme. Use the coral brand color for primary calls to action and important badges, not for every surface.
+- Light mode is the default for fresh visitors. Dark mode should only apply after a user explicitly toggles it, and should keep the same coral brand action color with neutral dark surfaces and readable muted text.
 
 ## Layout
 
@@ -119,6 +121,7 @@ The main design tokens live in `app/assets/stylesheets/application.css`.
 ## CSS Ownership
 
 - Global tokens and shared components: `app/assets/stylesheets/application.css`.
+- Theme tokens, dark-mode overrides, and theme toggle styling: `app/assets/stylesheets/theme.css`.
 - Auth pages: `app/assets/stylesheets/auth.css`.
 - Browse/search: `app/assets/stylesheets/browse.css`.
 - Messaging: `app/assets/stylesheets/messaging.css`.

@@ -37,6 +37,7 @@
     </div>
 
     <div class="app-header__actions">
+      <%= render "shared/theme_toggle" %>
       <% if user_signed_in? %>
         <%= link_to "My Matches", "#", class: "btn btn--primary btn--sm app-header__matches" %>
         <% n_unread = unread_notifications_count %>
